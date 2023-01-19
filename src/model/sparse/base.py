@@ -1,20 +1,18 @@
 """
-Base model declaration for supervised unmixing methods
+Sparse unmixing base model
 """
 
 from src.model.base import UnmixingModel
 
 
-class SupervisedUnmixingModel(UnmixingModel):
-    def __init__(
-        self,
-    ):
+class SparseUnmixingModel(UnmixingModel):
+    def __init__(self):
         super().__init__()
 
     def compute_abundances(
         self,
         Y,
-        E,
+        D,
         *args,
         **kwargs,
     ):

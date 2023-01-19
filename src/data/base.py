@@ -111,10 +111,13 @@ class HSI:
         denoised_image_reshape = V[:, :p] @ PC[:p]
         return np.clip(denoised_image_reshape, 0, 1)
 
-    def sample(self, seed=0):
+    def sample(self, expand_abundances=False):
         Y = np.copy(self.Y)
         E = np.copy(self.E)
         A = np.copy(self.A)
+        if expand_abundances:
+            A = np.vstack((A, np.zeros((self.M - self.p, self.N))))
+            assert A.shape[0] == self.M
         D = np.copy(self.D) if self.has_dict else None
         return Y, E, A, D
 

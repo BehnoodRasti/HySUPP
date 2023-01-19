@@ -4,7 +4,6 @@ Supervised unmixing methods main source file
 import logging
 
 from hydra.utils import instantiate
-import matplotlib.pyplot as plt
 
 from src.utils.aligners import AbundancesAligner
 from src.utils.metrics import SADAggregator, RMSEAggregator, SREAggregator
@@ -61,7 +60,7 @@ def main(cfg):
 
         # Compute metrics
         RMSE.add_run(run, A_gt, A1, hsi.labels)
-        SRE.add_run(run, A_gt, A1, hsi.labels)
+        SRE.add_run(run, A1, A_gt, hsi.labels)  # NOTE Order is important
         SAD.add_run(run, E_gt, E1, hsi.labels)
 
     # Aggregate metrics

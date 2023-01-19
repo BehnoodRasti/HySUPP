@@ -1,0 +1,3 @@
+_target_: src.model.sparse.SUnSAL
+lambd: 1e-3
+ASC: False

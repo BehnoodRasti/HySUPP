@@ -1,0 +1,3 @@
+_target_: src.model.sparse.SUnSALTV
+lambd: 1e-3
+lambd_tv: 1e-3

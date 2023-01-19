@@ -4,6 +4,8 @@ runs: 1
 projection: False
 SNR: Null
 
+MATLAB_root: "/home/azouaoui/matlab/"
+
 stdout: DEBUG
 
 defaults:
