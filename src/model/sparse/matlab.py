@@ -1,5 +1,5 @@
 """
-MATLAB methods
+MATLAB sparse unmixing methods
 """
 import logging
 import time
