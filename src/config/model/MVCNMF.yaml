@@ -1,0 +1,3 @@
+_target_: src.model.blind.MVCNMF
+regularization: 0.5
+constraint: 1

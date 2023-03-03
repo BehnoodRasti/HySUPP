@@ -29,5 +29,20 @@ We provide a utility script to turn an existing datasets composed of separated f
 
 ### Simulated
 
+We currently provide two simulated datasets that correspond to 2 different scenarios using 6 endmembers:
+
+1. `SimPurePixels` exhibits some pure pixels.
+2. `SimHighlyMixed` exhibits pixels having at least 3 mixed materials (up to 6).
 
 ### Real
+
+---
+
+## Experiments
+
+Here are a list of the commands used to launch all the experiments for simulated datasets:
+
+```shell
+# Example
+python main.py
+```

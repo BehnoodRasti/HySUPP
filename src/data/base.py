@@ -48,7 +48,7 @@ class HSI:
 
         # Noise
         self.noise = noise
-        self.noise_applied = False
+        # self.noise_applied = False
         self.projection_applied = False
 
         if "N" not in data.keys():
@@ -89,17 +89,17 @@ class HSI:
 
     def apply_noise(self, seed=0):
         # Apply noise but only once!
-        if not self.noise_applied:
-            logger.info("Applying noise to input HSI")
-            self.Y = self.noise.fit_transform(self.Y, seed=seed)
-            self.noise_applied = True
-        else:
-            logger.debug("No noise were applied...")
+        # if not self.noise_applied:
+        logger.info("Applying noise to input HSI")
+        self.Y_noisy = self.noise.fit_transform(self.Y, seed=seed)
+        # self.noise_applied = True
+        # else:
+        #     logger.debug("No noise were applied...")
 
     def apply_projection(self):
-        if not self.projection_applied and self.noise_applied:
+        if not self.projection_applied:
             logger.info("Applying SVD projection to input HSI")
-            self.Y = self.svd_projection(self.Y, self.p)
+            self.Y_noisy = self.svd_projection(self.Y_noisy, self.p)
             self.projection_applied = True
         else:
             logger.debug("No projection were applied...")
@@ -112,14 +112,14 @@ class HSI:
         return np.clip(denoised_image_reshape, 0, 1)
 
     def sample(self, expand_abundances=False):
-        Y = np.copy(self.Y)
+        Y_noisy = np.copy(self.Y_noisy)
         E = np.copy(self.E)
         A = np.copy(self.A)
         if expand_abundances:
             A = np.vstack((A, np.zeros((self.M - self.p, self.N))))
             assert A.shape[0] == self.M
         D = np.copy(self.D) if self.has_dict else None
-        return Y, E, A, D
+        return Y_noisy, E, A, D
 
     def __repr__(self) -> str:
         msg = f"HSI => {self.name}\n"

@@ -12,7 +12,7 @@ import torch
 import torch.nn.functional as F
 
 from .base import BlindUnmixingModel
-from src.model.extractors import SiVM, VCA
+from src.model.extractors import SiVM
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -33,7 +33,7 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
 
         # Hyperparameters
         self.L = hsi.L  # number of channels
-        self.p = hsi.p  # number of dictionary atoms
+        self.p = hsi.p  # number of endmembers
         self.H = hsi.H  # number of lines
         self.W = hsi.W  # number of samples per line
 
@@ -106,14 +106,6 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
         )
         self.softmax = nn.Softmax(dim=1)
 
-        # Initialize endmembers using SiVM extractor
-        extractor = SiVM()
-        Ehat = extractor.extract_endmembers(
-            hsi=self.hsi,
-            seed=seed,
-        )
-        self.decoder.weight.data = torch.Tensor(Ehat)
-
     def forward(self, x):
         x1 = self.layer1(x)
         xskip = self.layerskip(x)
@@ -139,6 +131,15 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
         logger.debug("Solving started...")
 
         self.init_architecture(seed=seed)
+
+        # Initialize endmembers using SiVM extractor
+        extractor = SiVM()
+        Ehat = extractor.extract_endmembers(
+            Y,
+            p,
+            seed=seed,
+        )
+        self.decoder.weight.data = torch.Tensor(Ehat)
 
         l, h, w = self.L, self.H, self.W
 

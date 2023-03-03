@@ -9,7 +9,7 @@ MATLAB_root: "/home/azouaoui/matlab/"
 stdout: DEBUG
 
 defaults:
-  - data: Sim1
+  - data: Sim_hard
   - noise: AWGN
   - extractor: VCA
   - model: FCLSU

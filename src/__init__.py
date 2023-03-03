@@ -2,4 +2,4 @@
 Global variables declaration
 """
 
-EPS = 1e-6
+EPS = 1e-10

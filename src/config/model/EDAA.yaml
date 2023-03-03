@@ -3,3 +3,4 @@ T: 100
 K1: 5
 K2: 5
 M: 50
+normalize: True

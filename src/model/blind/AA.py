@@ -90,6 +90,7 @@ class EDAA(BlindUnmixingModel):
         K1=5,
         K2=5,
         M=50,
+        normalize=True,
         *args,
         **kwargs,
     ):
@@ -98,6 +99,7 @@ class EDAA(BlindUnmixingModel):
         self.K1 = K1
         self.K2 = K2
         self.M = M
+        self.normalize = normalize
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     def compute_endmembers_and_abundances(
@@ -137,6 +139,11 @@ class EDAA(BlindUnmixingModel):
         results = {}
 
         tic = time.time()
+
+        # L2 Normalization here?
+        if self.normalize:
+            logger.debug("Applying L2 Normalization on input data...")
+            Y = Y / np.linalg.norm(Y, axis=0, ord=2, keepdims=True)
 
         # Convert data to tensor
         Y = torch.Tensor(Y)
@@ -204,7 +211,7 @@ class EDAA(BlindUnmixingModel):
         self.B = best_result["Bm"]
 
         toc = time.time()
-        self.time = tic - toc
+        self.time = toc - tic
         logger.info(self.print_time())
 
         return best_E, best_A

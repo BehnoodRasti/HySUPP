@@ -51,7 +51,10 @@ class SpectralAngleDistance(BaseMetric):
         normE = LA.norm(E, axis=0, keepdims=True)
         normEref = LA.norm(Eref, axis=0, keepdims=True)
 
-        return np.arccos((E / normE).T @ (Eref / normEref))
+        tmp = (E / normE).T @ (Eref / normEref)
+        ret = np.minimum(tmp, 1.0)  # NOTE Handle floating errors
+        # return np.arccos((E / normE).T @ (Eref / normEref))
+        return np.arccos(ret)
 
 
 class SADDegrees(SpectralAngleDistance):

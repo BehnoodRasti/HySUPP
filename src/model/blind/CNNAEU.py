@@ -6,14 +6,12 @@ import logging
 import time
 
 from tqdm import tqdm
-import numpy as np
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
 from sklearn.feature_extraction.image import extract_patches_2d
 
 from .base import BlindUnmixingModel
-from src.model.extractors import SiVM, VCA
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

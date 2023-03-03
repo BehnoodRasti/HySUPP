@@ -7,7 +7,7 @@ import logging
 from hydra.utils import instantiate
 
 from src.utils.aligners import AbundancesAligner
-from src.utils.metrics import SREAggregator
+from src.utils.metrics import SREAggregator, RMSEAggregator
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -26,6 +26,7 @@ def main(cfg):
 
     # Metrics
     SRE = SREAggregator()
+    RMSE = RMSEAggregator()
 
     # Log some info
     logger.info(hsi)
@@ -57,8 +58,10 @@ def main(cfg):
 
         # Compute metrics
         SRE.add_run(run, A2, A_gt, hsi.labels)  # NOTE Order is important here
+        RMSE.add_run(run, A2, A_gt, hsi.labels)
 
     # Aggregate metrics
     SRE.aggregate()
+    RMSE.aggregate()
 
     logger.debug("Sparse Unmixing --- end...")

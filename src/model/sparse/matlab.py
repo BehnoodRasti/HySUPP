@@ -19,7 +19,7 @@ except Exception:
     warnings.warn("matlab.engine was not imported. MATLAB code will not work")
 
 
-class SUnSAL(SparseUnmixingModel):
+class SUnSAL_MATLAB(SparseUnmixingModel):
     """
     Python wrapper on the SUnSAL matlab code found at
     https://github.com/ricardoborsoi/MUA_SparseUnmixing
@@ -148,7 +148,7 @@ class SUnSALTV(SparseUnmixingModel):
         return {"A": Ahat}
 
 
-class S2WSU(SparseUnmixingModel):
+class S2WSU_MATLAB(SparseUnmixingModel):
     """
     Python wrapper on the SUnSAL matlab code found at
     https://github.com/ricardoborsoi/MUA_SparseUnmixing

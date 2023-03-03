@@ -44,7 +44,7 @@ def main(cfg):
 
         # Endmembers extraction
         E_hat = extractor.extract_endmembers(
-            hsi=hsi, seed=cfg.seed + run, snr_input=noise.SNR
+            Y=hsi.Y, p=hsi.p, seed=cfg.seed + run, snr_input=noise.SNR
         )
 
         # Sample HSI

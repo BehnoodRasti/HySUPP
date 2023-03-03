@@ -1,3 +1,5 @@
 _target_: src.model.sparse.SUnSAL
 lambd: 1e-3
-ASC: False
+positivity: True
+AL_iters: 1000
+tol: 1e-5
