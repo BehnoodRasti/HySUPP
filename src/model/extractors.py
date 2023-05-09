@@ -244,10 +244,8 @@ class SiVM(BaseExtractor):
 class SISAL(BaseExtractor):
     def __init__(
         self,
-        root_matlab,
     ):
         super().__init__()
-        self.root_matlab = root_matlab
 
     @staticmethod
     def soft_neg(y, tau):

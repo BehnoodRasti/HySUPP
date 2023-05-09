@@ -15,10 +15,18 @@ logger.setLevel(logging.DEBUG)
 
 
 class SUnAA(SparseUnmixingModel):
-    def __init__(self, hsi, T, *args, **kwargs):
+    def __init__(
+        self,
+        hsi,
+        T,
+        low_rank=False,
+        *args,
+        **kwargs,
+    ):
         super().__init__()
         self.p = hsi.p
         self.T = T  # number of iterations
+        self.low_rank = low_rank
 
     def compute_abundances(self, Y, D, *args, **kwargs):
         def loss(a, b):
@@ -75,4 +83,6 @@ class SUnAA(SparseUnmixingModel):
         self.B = B
         self.A_lowrank = A  # low-rank abundances (i.e. $p$ endmembers)
 
+        if self.low_rank:
+            return A
         return B @ A  # redundant/full abundances

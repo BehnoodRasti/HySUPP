@@ -144,19 +144,19 @@ python main.py mode=sparse noise.SNR=40 data=SimPurePixels,SimHighlyMixed model=
 * SUnCNN for SNR=20dB for both datasets:
 
 ```shell
-python main.py mode=sparse noise.SNR=20 data=SimPurePixels,SimHighlyMixed model=SUnCNN model.niters=4000 runs=10 --multirun
+python main.py mode=sparse noise.SNR=20 data=SimPurePixels,SimHighlyMixed model=SUnCNN model.niters=4000 runs=10 projection=True --multirun
 ```
 
 * SUnCNN for SNR=30dB for both datasets:
 
 ```shell
-python main.py mode=sparse noise.SNR=30 data=SimPurePixels,SimHighlyMixed model=SUnCNN model.niters=8000 runs=10 --multirun
+python main.py mode=sparse noise.SNR=30 data=SimPurePixels,SimHighlyMixed model=SUnCNN model.niters=8000 runs=10 projection=True --multirun
 ```
 
 * SUnCNN for SNR=40dB for both datasets:
 
 ```shell
-python main.py mode=sparse noise.SNR=40 data=SimPurePixels,SimHighlyMixed model=SUnCNN model.niters=16000 runs=10 --multirun
+python main.py mode=sparse noise.SNR=40 data=SimPurePixels,SimHighlyMixed model=SUnCNN model.niters=16000 runs=10 projection=True --multirun
 ```
 
 ### Blind
@@ -207,19 +207,19 @@ python main.py mode=blind noise.SNR=20,30,40 data=SimPurePixels,SimHighlyMixed m
 * MiSiCNet for 20dB for both datasets
 
 ```shell
-python main.py mode=blind noise.SNR=20 data=SimPurePixels,SimHighlyMixed model=MiSiCNet model.niters=4000 runs=10 --multirun
+python main.py mode=blind noise.SNR=20 data=SimPurePixels,SimHighlyMixed model=MiSiCNet model.niters=4000 runs=10 projection=True --multirun
 ```
 
 * MiSiCNet for 30dB for both datasets
 
 ```shell
-python main.py mode=blind noise.SNR=30 data=SimPurePixels,SimHighlyMixed model=MiSiCNet model.niters=8000 runs=10 --multirun
+python main.py mode=blind noise.SNR=30 data=SimPurePixels,SimHighlyMixed model=MiSiCNet model.niters=8000 runs=10 projection=True --multirun
 ```
 
 * MiSiCNet for 40dB for both datasets
 
 ```shell
-python main.py mode=blind noise.SNR=40 data=SimPurePixels,SimHighlyMixed model=MiSiCNet model.niters=16000 runs=10 --multirun
+python main.py mode=blind noise.SNR=40 data=SimPurePixels,SimHighlyMixed model=MiSiCNet model.niters=16000 runs=10 projection=True --multirun
 ```
 
 

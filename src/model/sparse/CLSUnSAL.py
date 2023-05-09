@@ -23,7 +23,9 @@ class CLSUnSAL(SparseUnmixingModel):
         lambd=0.0,
         verbose=True,
         tol=1e-4,
+        mu=0.1,
         x0=0,
+        # axis=1,
         *args,
         **kwargs,
     ):
@@ -37,6 +39,8 @@ class CLSUnSAL(SparseUnmixingModel):
         # self.addone = addone
         self.tol = tol
         self.x0 = x0
+        self.mu = mu
+        # self.axis = axis
 
     def compute_abundances(self, Y, D, *args, **kwargs):
         tic = time.time()
@@ -58,7 +62,8 @@ class CLSUnSAL(SparseUnmixingModel):
         logger.debug(f"Lambda initial value => {lambd:.3e}")
 
         # Constants and initialization
-        mu = 0.1
+        # mu = 0.1
+        mu = self.mu
         logger.debug(f"Mu initial value => {mu:.3e}")
 
         UF, sF, VF = LA.svd(D.T @ D)

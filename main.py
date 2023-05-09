@@ -26,6 +26,8 @@ def main(cfg: DictConfig) -> None:
         from src.supervised import main as _main
     elif mode == "sparse":
         from src.sparse import main as _main
+    elif mode == "extract":
+        from src.extract import main as _main
     else:
         raise ValueError(f"Mode {mode} is invalid")
 

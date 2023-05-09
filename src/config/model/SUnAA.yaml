@@ -1,2 +1,3 @@
 _target_: src.model.sparse.SUnAA
 T: 500
+low_rank: False

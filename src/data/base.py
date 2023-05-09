@@ -88,17 +88,12 @@ class HSI:
             os.makedirs(self.figs_dir, exist_ok=True)
 
     def apply_noise(self, seed=0):
-        # Apply noise but only once!
-        # if not self.noise_applied:
-        logger.info("Applying noise to input HSI")
-        self.Y_noisy = self.noise.fit_transform(self.Y, seed=seed)
-        # self.noise_applied = True
-        # else:
-        #     logger.debug("No noise were applied...")
+        return self.noise.fit_transform(self.Y, seed=seed)
 
     def apply_projection(self):
         if not self.projection_applied:
-            logger.info("Applying SVD projection to input HSI")
+            # TODO Sort this mess
+            logger.info("SVD projection on input HSI...")
             self.Y_noisy = self.svd_projection(self.Y_noisy, self.p)
             self.projection_applied = True
         else:
@@ -111,8 +106,15 @@ class HSI:
         denoised_image_reshape = V[:, :p] @ PC[:p]
         return np.clip(denoised_image_reshape, 0, 1)
 
-    def sample(self, expand_abundances=False):
-        Y_noisy = np.copy(self.Y_noisy)
+    def get_endmembers_extraction_input(self):
+        return (self.Y, self.p, self.H, self.W, self.N, self.L)
+
+    def sample(self, expand_abundances=False, seed=0, projection=False):
+        logger.info("Apply noise to input HSI...")
+        Y_noisy = self.apply_noise(seed)
+        if projection:
+            logger.info("SVD projection on noisy HSI...")
+            Y_noisy = self.svd_projection(Y_noisy, self.p)
         E = np.copy(self.E)
         A = np.copy(self.A)
         if expand_abundances:
@@ -130,14 +132,14 @@ class HSI:
         msg += f"GlobalMinValue: {self.Y.min()}, GlobalMaxValue: {self.Y.max()}\n"
         return msg
 
-    def plot_endmembers(self):
+    def plot_endmembers(self, E0=None, run=0):
         """
         Display endmembers
         """
-        title = f"{self.name} - GT endmembers"
+        title = f"{self.name} - endmembers" + " (GT)" if E0 is None else ""
         ylabel = "Reflectance"
         xlabel = "# Bands"
-        E = np.copy(self.E)
+        E = np.copy(self.E) if E0 is None else np.copy(E0)
 
         plt.figure(figsize=(6, 6))
         for pp in range(self.p):
@@ -147,14 +149,16 @@ class HSI:
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
 
-        figname = f"{self.name}-endmembers-GT.png"
+        suffix = "-GT" if E0 is None else f"-{run}"
+        figname = f"{self.name}-endmembers{suffix}.png"
         plt.savefig(os.path.join(self.figs_dir, figname))
         plt.close()
 
-    def plot_abundances(self):
+    def plot_abundances(self, A0=None, run=0):
         nrows, ncols = (1, self.p)
-        title = f"{self.name} - GT abundances"
-        A = np.copy(self.A)
+        title = f"{self.name} - abundances" + " (GT)" if A0 is None else ""
+
+        A = np.copy(self.A) if A0 is None else np.copy(A0)
         A = A.reshape(self.p, self.H, self.W)
 
         fig, ax = plt.subplots(
@@ -179,6 +183,38 @@ class HSI:
                     break
 
         plt.suptitle(title)
-        figname = f"{self.name}-abundances-GT.png"
+        suffix = "-GT" if A0 is None else f"-{run}"
+        figname = f"{self.name}-abundances{suffix}.png"
         plt.savefig(os.path.join(self.figs_dir, figname))
         plt.close()
+
+    def plot_img(self):
+        Y = np.copy(self.Y_noisy)
+
+        Y = Y.reshape(self.L, self.H, self.W)
+
+        fig, ax = plt.subplots()
+
+        ax.imshow(Y[self.L // 2])
+
+        plt.show()
+        breakpoint()
+        plt.close()
+
+
+if __name__ == "__main__":
+    from .noise import AdditiveWhiteGaussianNoise as AWGN
+
+    noise = AWGN(SNR=10)
+    hsi = HSI("SimHighlyMixed", noise=noise)
+    hsi.apply_noise(seed=0)
+    hsi.plot_img()
+    hsi.apply_noise(seed=42)
+    hsi.plot_img()
+
+    noise = AWGN(SNR=20)
+    hsi = HSI("SimHighlyMixed", noise=noise)
+    hsi.apply_noise(seed=0)
+    hsi.plot_img()
+    hsi.apply_noise(seed=42)
+    hsi.plot_img()

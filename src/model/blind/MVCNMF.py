@@ -49,6 +49,9 @@ class MVCNMF(BlindUnmixingModel):
         # n_components,
         regularization=0.5,
         constraint=1,
+        learning_rate=100,
+        max_iter=25,
+        scaling=0.5,
         *args,
         **kwargs,
     ):
@@ -57,6 +60,9 @@ class MVCNMF(BlindUnmixingModel):
         self.constraint = constraint
         # self.tau = regularization / factorial(self.c - 1)
         self.regularization = regularization
+        self.learning_rate = learning_rate
+        self.max_iter = max_iter
+        self.scaling = scaling
 
     @property
     def C(self):
@@ -196,12 +202,13 @@ class MVCNMF(BlindUnmixingModel):
         p,
         fit_tolerance=1e-2,
         convergence_tolerance=1e-6,
-        learning_rate=100,
+        # learning_rate=100,
         # learning_rate=1,
-        scaling=0.5,
+        # learning_rate=1,
+        # scaling=0.5,
         learning_tolerance=1e-4,
         # max_iter=1000,
-        max_iter=25,
+        # max_iter=25,
         *args,
         **kwargs,
     ):
@@ -235,6 +242,9 @@ class MVCNMF(BlindUnmixingModel):
             c * N loading matrix, containing the relative abundance.
 
         """
+        learning_rate = self.learning_rate
+        max_iter = self.max_iter
+        scaling = self.scaling
         X = Y
         self.c = p
         self.tau = self.regularization / factorial(self.c - 1)
@@ -254,6 +264,7 @@ class MVCNMF(BlindUnmixingModel):
                 1,
                 scaling,
                 learning_tolerance,
+                max_iter=50,
             )
             A = self.A_new(X, A, S, alpha)
             A_bar = self.augment(A)
@@ -265,6 +276,7 @@ class MVCNMF(BlindUnmixingModel):
                 1,
                 scaling,
                 learning_tolerance,
+                max_iter=50,
             )
             S = self.S_new(X_bar, A_bar, S, beta)
             error_difference = np.abs(self.objective(X, A, S) - o)

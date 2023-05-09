@@ -88,6 +88,16 @@ class aRMSE(BaseMetric):
         return 100 * np.sqrt(((A - Aref) ** 2).mean())
 
 
+class eRMSE(BaseMetric):
+    def __init__(self):
+        super().__init__()
+
+    def __call__(self, E, Eref):
+        E, Eref = self._check_input(E, Eref)
+        # TODO L2 normalize endmembers
+        return 100 * np.sqrt(((E - Eref) ** 2).mean())
+
+
 class SRE(BaseMetric):
     def __init__(self):
         super().__init__()
@@ -161,6 +171,15 @@ class RMSEAggregator(RunAggregator):
         super().__init__(
             aRMSE(),
             use_endmembers=False,
+            detail=True,
+        )
+
+
+class ERMSEAggregator(RunAggregator):
+    def __init__(self):
+        super().__init__(
+            eRMSE(),
+            use_endmembers=True,
             detail=True,
         )
 

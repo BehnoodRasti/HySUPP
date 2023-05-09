@@ -2,14 +2,13 @@ mode: "blind"
 seed: 0
 runs: 1
 projection: False
-SNR: Null
 
 MATLAB_root: "/home/azouaoui/matlab/"
 
 stdout: DEBUG
 
 defaults:
-  - data: Sim_hard
+  - data: SimPurePixelsPruned
   - noise: AWGN
   - extractor: VCA
   - model: FCLSU

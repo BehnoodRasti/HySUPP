@@ -3,7 +3,6 @@ epochs: 800
 alpha: 0.1
 beta: 0.03
 drop_out: 0.2
-#learning_rate: 0.03
 learning_rate: 0.001
 weight_decay: 1e-4
 step_size: 30
