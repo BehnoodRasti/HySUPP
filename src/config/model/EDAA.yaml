@@ -1,6 +1,0 @@
-_target_: src.model.blind.EDAA
-T: 200
-K1: 10
-K2: 10
-M: 50
-normalize: False

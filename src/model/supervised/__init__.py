@@ -2,5 +2,5 @@
 Import supervised unmixing models
 """
 
-from .FCLSU import FCLSU, DecompSimplex
+from .FCLS import FCLS, DecompSimplex
 from .UnDIP import UnDIP

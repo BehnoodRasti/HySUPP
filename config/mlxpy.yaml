@@ -1,0 +1,20 @@
+logger:
+  name: DefaultLogger
+  parent_log_dir: ./data/logs
+  forced_log_id: -1
+  log_streams_to_file: false
+scheduler:
+  name: NoScheduler
+  shell_path: /bin/bash
+  shell_config_cmd: ''
+  env_cmd: ''
+  cleanup_cmd: ''
+  option_cmd: []
+version_manager:
+  name: GitVM
+  parent_work_dir: ./.workdir
+  compute_requirements: false
+use_version_manager: false
+use_scheduler: false
+use_logger: true
+interactive_mode: true

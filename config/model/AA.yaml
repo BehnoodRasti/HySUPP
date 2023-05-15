@@ -1,0 +1,9 @@
+# _target_: src.model.blind.ArchetypalAnalysis
+name: src.model.blind.ArchetypalAnalysis
+epsilon: 1e-3
+robust: False
+computeXtX: True
+stepsFISTA: 3
+stepsAS: 100
+randominit: False
+numThreads: -1

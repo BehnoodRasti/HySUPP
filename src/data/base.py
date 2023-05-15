@@ -4,16 +4,18 @@ HSI data base class
 import logging
 from typing import Any
 import os
+from dataclasses import dataclass
 
-from hydra.utils import to_absolute_path
+# from hydra.utils import to_absolute_path
 import scipy.io as sio
 import numpy as np
 import matplotlib.pyplot as plt
+from mlxpy.data_structures.artifacts import Artifact
 
 from src import EPS
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
 INTEGER_VALUES = ("H", "W", "M", "L", "p", "N")
 
@@ -21,21 +23,37 @@ INTEGER_VALUES = ("H", "W", "M", "L", "p", "N")
 class HSI:
     def __init__(
         self,
-        name: str,
+        dataset: str,
         data_dir: str = "./data",
         figs_dir: str = "./figs",
-        noise=None,
     ) -> None:
+
+        # Populate with Null data
+        # integers
+        self.H = 0
+        self.W = 0
+        self.M = 0
+        self.L = 0
+        self.p = 0
+        self.N = 0
+        # arrays
+        self.Y = np.zeros((self.L, self.N))
+        self.E = np.zeros((self.L, self.p))
+        self.A = np.zeros((self.p, self.N))
+        self.D = np.zeros((self.L, self.M))
+        self.labels = []
+
         # Locate and check data file
-        self.name = name
+        self.name = dataset
         filename = f"{self.name}.mat"
-        path = to_absolute_path(os.path.join(data_dir, filename))
-        logger.debug(f"Path to be opened: {path}")
+        # path = to_absolute_path(os.path.join(data_dir, filename))
+        path = os.path.join(data_dir, filename)
+        log.debug(f"Path to be opened: {path}")
         assert os.path.isfile(path)
 
         # Open data file
         data = sio.loadmat(path)
-        logger.debug(f"Data keys: {data.keys()}")
+        log.debug(f"Data keys: {data.keys()}")
 
         # Populate attributes based on data file values
         for key in filter(
@@ -46,89 +64,55 @@ class HSI:
                 key, data[key].item() if key in INTEGER_VALUES else data[key]
             )
 
-        # Noise
-        self.noise = noise
-        # self.noise_applied = False
-        self.projection_applied = False
-
         if "N" not in data.keys():
             self.N = self.H * self.W
 
         # Check data
         assert self.N == self.H * self.W
-        assert self.E.shape == (self.L, self.p)
         assert self.Y.shape == (self.L, self.N)
-        assert self.A.shape == (self.p, self.N)
 
         self.has_dict = False
         if "D" in data.keys():
             self.has_dict = True
             assert self.D.shape == (self.L, self.M)
 
-        try:
-            assert len(self.labels) == self.p
-            tmp_labels = list(self.labels)
-            self.labels = [s.strip(" ") for s in tmp_labels]
-
-        except Exception:
-            # Create numeroted labels
-            self.labels = [f"#{ii}" for ii in range(self.p)]
-
-        # Check physical constraints
-        # Abundance Sum-to-One Constraint (ASC)
-        assert np.allclose(self.A.sum(0), np.ones(self.N))
-        # Abundance Non-negative Constraint (ANC)
-        assert np.all(self.A >= -EPS)
-        # Endmembers Non-negative Constraint (ENC)
-        assert np.all(self.E >= -EPS)
-
         # Create output figures folder
         self.figs_dir = os.path.join(os.getcwd(), figs_dir)
         if self.figs_dir is not None:
             os.makedirs(self.figs_dir, exist_ok=True)
 
-    def apply_noise(self, seed=0):
-        return self.noise.fit_transform(self.Y, seed=seed)
+    def get_data(self):
+        return (
+            self.Y,
+            self.p,
+            self.D,
+        )
 
-    def apply_projection(self):
-        if not self.projection_applied:
-            # TODO Sort this mess
-            logger.info("SVD projection on input HSI...")
-            self.Y_noisy = self.svd_projection(self.Y_noisy, self.p)
-            self.projection_applied = True
-        else:
-            logger.debug("No projection were applied...")
+    def get_HSI_dimensions(self):
+        return {
+            "bands": self.L,
+            "pixels": self.N,
+            "lines": self.H,
+            "samples": self.W,
+            "atoms": self.M,
+        }
 
-    @staticmethod
-    def svd_projection(Y, p):
-        V, SS, U = np.linalg.svd(Y, full_matrices=False)
-        PC = np.diag(SS) @ U
-        denoised_image_reshape = V[:, :p] @ PC[:p]
-        return np.clip(denoised_image_reshape, 0, 1)
+    def get_img_shape(self):
+        return (
+            self.H,
+            self.W,
+        )
 
-    def get_endmembers_extraction_input(self):
-        return (self.Y, self.p, self.H, self.W, self.N, self.L)
-
-    def sample(self, expand_abundances=False, seed=0, projection=False):
-        logger.info("Apply noise to input HSI...")
-        Y_noisy = self.apply_noise(seed)
-        if projection:
-            logger.info("SVD projection on noisy HSI...")
-            Y_noisy = self.svd_projection(Y_noisy, self.p)
-        E = np.copy(self.E)
-        A = np.copy(self.A)
-        if expand_abundances:
-            A = np.vstack((A, np.zeros((self.M - self.p, self.N))))
-            assert A.shape[0] == self.M
-        D = np.copy(self.D) if self.has_dict else None
-        return Y_noisy, E, A, D
+    def get_labels(self):
+        return self.labels
 
     def __repr__(self) -> str:
         msg = f"HSI => {self.name}\n"
         msg += "------------------------------\n"
         msg += f"{self.L} bands,\n"
         msg += f"{self.H} lines, {self.W} samples ({self.N} pixels),\n"
-        msg += f"{self.p} endmembers ({self.labels})\n"
+        msg += f"{self.p} endmembers ({self.labels}),\n"
+        msg += f"{self.M} atoms\n"
         msg += f"GlobalMinValue: {self.Y.min()}, GlobalMaxValue: {self.Y.max()}\n"
         return msg
 
@@ -188,33 +172,84 @@ class HSI:
         plt.savefig(os.path.join(self.figs_dir, figname))
         plt.close()
 
-    def plot_img(self):
-        Y = np.copy(self.Y_noisy)
 
-        Y = Y.reshape(self.L, self.H, self.W)
+class HSIWithGT(HSI):
+    def __init__(
+        self,
+        dataset,
+        data_dir,
+        figs_dir,
+    ):
+        super().__init__(
+            dataset=dataset,
+            data_dir=data_dir,
+            figs_dir=figs_dir,
+        )
 
-        fig, ax = plt.subplots()
+        # Sanity check on ground truth
+        assert self.E.shape == (self.L, self.p)
+        assert self.A.shape == (self.p, self.N)
 
-        ax.imshow(Y[self.L // 2])
+        try:
+            assert len(self.labels) == self.p
+            tmp_labels = list(self.labels)
+            self.labels = [s.strip(" ") for s in tmp_labels]
 
-        plt.show()
-        breakpoint()
-        plt.close()
+        except Exception:
+            # Create numeroted labels
+            self.labels = [f"#{ii}" for ii in range(self.p)]
+
+        # Check physical constraints
+        # Abundance Sum-to-One Constraint (ASC)
+        assert np.allclose(self.A.sum(0), np.ones(self.N))
+        # Abundance Non-negative Constraint (ANC)
+        assert np.all(self.A >= -EPS)
+        # Endmembers Non-negative Constraint (ENC)
+        assert np.all(self.E >= -EPS)
+
+    def get_GT(self):
+        return (
+            self.E,
+            self.A,
+        )
+
+    def has_GT(self):
+        return True
+
+
+class RealHSI(HSI):
+    def __init__(
+        self,
+        dataset,
+        data_dir,
+        figs_dir,
+        p=3,
+    ):
+        super().__init__(
+            dataset=dataset,
+            data_dir=data_dir,
+            figs_dir=figs_dir,
+        )
+        self.p = p
+        # Create labels
+        self.labels = [f"#{ii}" for ii in range(self.p)]
+
+    def has_GT(self):
+        return False
+
+
+@dataclass
+class Estimate(Artifact):
+
+    ext = ".mat"
+
+    def __init__(self, Ehat, Ahat, H, W):
+        data = {"E": Ehat, "A": Ahat.reshape(-1, H, W)}
+        super().__init__(obj=data, ext=self.ext)
+
+    def _save(self, fname="estimates"):
+        sio.savemat(f"{fname}{self.ext}", self.obj)
 
 
 if __name__ == "__main__":
-    from .noise import AdditiveWhiteGaussianNoise as AWGN
-
-    noise = AWGN(SNR=10)
-    hsi = HSI("SimHighlyMixed", noise=noise)
-    hsi.apply_noise(seed=0)
-    hsi.plot_img()
-    hsi.apply_noise(seed=42)
-    hsi.plot_img()
-
-    noise = AWGN(SNR=20)
-    hsi = HSI("SimHighlyMixed", noise=noise)
-    hsi.apply_noise(seed=0)
-    hsi.plot_img()
-    hsi.apply_noise(seed=42)
-    hsi.plot_img()
+    print("TODO!")

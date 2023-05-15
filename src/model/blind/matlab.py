@@ -27,7 +27,6 @@ class NMFQMV(BlindUnmixingModel):
 
     def __init__(
         self,
-        hsi,
         root_matlab,
         term: str = "boundary",
         *args,
@@ -43,20 +42,17 @@ class NMFQMV(BlindUnmixingModel):
         self.betas = np.logspace(2, -2, 5)
         self.drawfigs = "no"
 
-        # Image parameters
-        self.H, self.W = hsi.H, hsi.W
-
         # Start matlab engine
         self.engine = matlab.engine.start_matlab()
         logger.debug("MATLAB engine started")
         # Go to SUnSAL code
         self.engine.cd(path_to_NMFQMV)
 
-    def compute_endmembers_and_abundances(self, Y, p, *args, **kwargs):
+    def compute_endmembers_and_abundances(self, Y, p, H, W, *args, **kwargs):
         tic = time.time()
 
         L, N = Y.shape
-        Y = Y.T.reshape(self.H, self.W, L)
+        Y = Y.T.reshape(H, W, L)
         Y = Y.transpose(1, 0, 2)
         _, Ehat, Ahat = self.engine.NMF_QMV(
             matlab.double(Y.tolist()),

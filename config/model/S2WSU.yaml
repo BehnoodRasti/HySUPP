@@ -1,0 +1,3 @@
+# _target_: src.model.sparse.S2WSU
+name: src.model.semisupervised.S2WSU
+lambd: 1e-3

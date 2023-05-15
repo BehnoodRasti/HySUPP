@@ -140,10 +140,10 @@ class EDAA(BlindUnmixingModel):
 
         tic = time.time()
 
-        # L2 Normalization here?
-        if self.normalize:
-            logger.debug("Applying L2 Normalization on input data...")
-            Y = Y / np.linalg.norm(Y, axis=0, ord=2, keepdims=True)
+        # # L2 Normalization here?
+        # if self.normalize:
+        #     logger.debug("Applying L2 Normalization on input data...")
+        #     Y = Y / np.linalg.norm(Y, axis=0, ord=2, keepdims=True)
 
         # Convert data to tensor
         Y = torch.Tensor(Y)

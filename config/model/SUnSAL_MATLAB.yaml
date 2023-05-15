@@ -1,0 +1,4 @@
+# _target_: src.model.sparse.SUnSAL_MATLAB
+_target_: src.model.semisupervised.SUnSAL_MATLAB
+lambd: 1e-3
+ASC: False
