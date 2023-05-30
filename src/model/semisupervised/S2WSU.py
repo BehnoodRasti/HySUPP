@@ -22,11 +22,10 @@ logger.setLevel(logging.DEBUG)
 class S2WSU(SparseUnmixingModel):
     def __init__(
         self,
-        hsi,
         AL_iters=5,
         lambd=0.0,
         verbose=True,
-        tol=1e-5,
+        tol=1e-4,
         x0=0,
         *args,
         **kwargs,
@@ -39,19 +38,15 @@ class S2WSU(SparseUnmixingModel):
         self.tol = tol
         self.x0 = x0
 
-        self.H = hsi.H
-        self.W = hsi.W
-
     @staticmethod
     def soft(b, t):
         max_b = np.maximum(np.abs(b) - t, 0)
         return b * (max_b / (max_b + t))
 
-    def compute_abundances(self, Y, D, *args, **kwargs):
+    def compute_abundances(self, Y, D, H, W, *args, **kwargs):
         tic = time.time()
         LD, M = D.shape
         L, N = Y.shape
-        H, W = self.H, self.W
 
         assert L == LD, "Inconsistent number of channels for D and Y"
 

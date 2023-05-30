@@ -3,4 +3,4 @@ name: src.model.semisupervised.SUnSAL
 lambd: 1e-3
 positivity: True
 AL_iters: 1000
-tol: 1e-5
+tol: 1e-4

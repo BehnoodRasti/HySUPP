@@ -20,7 +20,6 @@ logger.setLevel(logging.DEBUG)
 class SUnCNN(nn.Module, SparseUnmixingModel):
     def __init__(
         self,
-        hsi,
         niters=4000,
         lr=0.001,
         exp_weight=0.99,
@@ -29,12 +28,6 @@ class SUnCNN(nn.Module, SparseUnmixingModel):
         **kwargs,
     ):
         super().__init__()
-
-        # Hyperparameters
-        self.L = hsi.L  # number of channels
-        self.M = hsi.M  # number of dictionary atoms
-        self.H = hsi.H  # number of lines
-        self.W = hsi.W  # number of samples per line
 
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu",
@@ -143,9 +136,15 @@ class SUnCNN(nn.Module, SparseUnmixingModel):
 
         return torch.cat(inputs_, dim=1)
 
-    def compute_abundances(self, Y, D, seed=0, *args, **kwargs):
+    def compute_abundances(self, Y, D, H, W, seed=0, *args, **kwargs):
         tic = time.time()
         logger.debug("Solving started...")
+
+        # Hyperparameters
+        self.L, self.N = Y.shape
+        LD, self.M = D.shape
+        assert self.L == LD, "Inconsistent number of channels for Y and D"
+        self.H, self.W = H, W
 
         self.init_architecture(seed=seed)
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)

@@ -31,7 +31,7 @@ def main(ctx: mlxpy.Context) -> None:
     # Get image dimensions
     H, W = hsi.get_img_shape()
     # Normalize HSI
-    Y = (Y - Y.min()) / (Y.max() - Y.min())
+    # Y = (Y - Y.min()) / (Y.max() - Y.min())
     # Apply noise
     Y = noise.apply(Y)
     # L2 normalization

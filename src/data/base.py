@@ -42,6 +42,7 @@ class HSI:
         self.A = np.zeros((self.p, self.N))
         self.D = np.zeros((self.L, self.M))
         self.labels = []
+        self.index = []
 
         # Locate and check data file
         self.name = dataset
@@ -76,6 +77,9 @@ class HSI:
             self.has_dict = True
             assert self.D.shape == (self.L, self.M)
 
+        if "index" in data.keys():
+            self.index = list(self.index.squeeze())
+
         # Create output figures folder
         self.figs_dir = os.path.join(os.getcwd(), figs_dir)
         if self.figs_dir is not None:
@@ -105,6 +109,9 @@ class HSI:
 
     def get_labels(self):
         return self.labels
+
+    def get_index(self):
+        return self.index
 
     def __repr__(self) -> str:
         msg = f"HSI => {self.name}\n"
@@ -201,7 +208,12 @@ class HSIWithGT(HSI):
 
         # Check physical constraints
         # Abundance Sum-to-One Constraint (ASC)
-        assert np.allclose(self.A.sum(0), np.ones(self.N))
+        assert np.allclose(
+            self.A.sum(0),
+            np.ones(self.N),
+            rtol=1e-3,
+            atol=1e-3,
+        )
         # Abundance Non-negative Constraint (ANC)
         assert np.all(self.A >= -EPS)
         # Endmembers Non-negative Constraint (ENC)

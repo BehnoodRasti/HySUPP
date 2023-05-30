@@ -28,8 +28,6 @@ def main(ctx: mlxpy.Context) -> None:
     Y, p, D = hsi.get_data()
     # Get image dimensions
     H, W = hsi.get_img_shape()
-    # Normalize HSI
-    Y = (Y - Y.min()) / (Y.max() - Y.min())
     # Apply noise
     Y = noise.apply(Y)
     # L2 normalization
@@ -52,7 +50,9 @@ def main(ctx: mlxpy.Context) -> None:
         _, A_gt = hsi.get_GT()
         # NOTE: Alignment not needed
         # Select only the first relevant components
-        A1 = A_hat[:p]
+        # NOTE Fix this code by using a custom index tied to the dataset
+        index = hsi.get_index()
+        A1 = A_hat[index]
         # Get labels
         labels = hsi.get_labels()
         # Compute and log metrics

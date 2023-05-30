@@ -20,7 +20,6 @@ logger.setLevel(logging.DEBUG)
 class CNNAEU(nn.Module, BlindUnmixingModel):
     def __init__(
         self,
-        hsi,
         scale=3.0,
         epochs=320,
         lr=0.0003,
@@ -31,12 +30,6 @@ class CNNAEU(nn.Module, BlindUnmixingModel):
     ):
         super().__init__()
 
-        # Hyperparameters
-        self.L = hsi.L  # number of channels
-        self.p = hsi.p  # number of dictionary atoms
-        self.H = hsi.H  # number of lines
-        self.W = hsi.W  # number of samples per line
-
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu",
         )
@@ -46,9 +39,7 @@ class CNNAEU(nn.Module, BlindUnmixingModel):
             "inplace": True,
         }
 
-        self.hsi = hsi
         self.scale = scale
-        self.num_patches = int(250 * self.H * self.W * self.L / (307 * 307 * 162))
         self.epochs = epochs
         self.lr = lr
         self.batch_size = batch_size
@@ -103,9 +94,18 @@ class CNNAEU(nn.Module, BlindUnmixingModel):
         sad_score = torch.clamp(dot_product / (target_norm * output_norm), -1, 1).acos()
         return sad_score.mean()
 
-    def compute_endmembers_and_abundances(self, Y, p, seed=0, *args, **kwargs):
+    def compute_endmembers_and_abundances(self, Y, p, H, W, seed=0, *args, **kwargs):
         tic = time.time()
         logger.debug("Solving started...")
+
+        L, N = Y.shape
+        # Hyperparameters
+        self.L = L  # number of channels
+        self.p = p  # number of dictionary atoms
+        self.H = H  # number of lines
+        self.W = W  # number of samples per line
+
+        self.num_patches = int(250 * self.H * self.W * self.L / (307 * 307 * 162))
 
         self.init_architecture(seed=seed)
 
