@@ -1,20 +1,20 @@
 """
 Blind unmixing methods main source file
 """
-import mlxpy
-from mlxpy.launcher import _instance_from_config
+import mlxp
+from mlxp.launcher import _instance_from_config
 import logging
 import numpy as np
 
 from src.data.utils import SVD_projection
 from src.utils.aligners import AbundancesAligner
-from src.utils.metrics import SRE, SADDegrees, aRMSE, compute_metric
+from src.utils.metrics import SRE, SADDegrees, aRMSE, eRMSE, compute_metric
 from src.data.base import Estimate
 
 log = logging.getLogger(__name__)
 
 
-def main(ctx: mlxpy.Context) -> None:
+def main(ctx: mlxp.Context) -> None:
 
     cfg = ctx.config
     logger = ctx.logger
@@ -82,6 +82,14 @@ def main(ctx: mlxpy.Context) -> None:
                 ),
                 "SAD": compute_metric(
                     SADDegrees(),
+                    E_gt,
+                    E1,
+                    labels,
+                    detail=True,
+                    on_endmembers=True,
+                ),
+                "eRMSE": compute_metric(
+                    eRMSE(),
                     E_gt,
                     E1,
                     labels,

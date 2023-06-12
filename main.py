@@ -6,7 +6,7 @@ import logging
 import logging.config
 
 import yaml
-import mlxpy
+import mlxp
 
 
 def set_seeds(seed):
@@ -17,11 +17,11 @@ def set_seeds(seed):
     np.random.seed(seed)
 
 
-@mlxpy.launch(
+@mlxp.launch(
     config_path="./config",
     seeding_function=set_seeds,
 )
-def unmixing(ctx: mlxpy.Context) -> None:
+def unmixing(ctx: mlxp.Context) -> None:
 
     cfg = ctx.config
     mode = cfg.mode

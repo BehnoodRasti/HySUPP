@@ -1,8 +1,8 @@
 """
 Semi-supervised unmixing methods main source file
 """
-import mlxpy
-from mlxpy.launcher import _instance_from_config
+import mlxp
+from mlxp.launcher import _instance_from_config
 import logging
 import numpy as np
 
@@ -13,7 +13,7 @@ from src.data.base import Estimate
 log = logging.getLogger(__name__)
 
 
-def main(ctx: mlxpy.Context) -> None:
+def main(ctx: mlxp.Context) -> None:
     log.info("Semi-Supervised Unmixing - [START]...")
     cfg = ctx.config
     logger = ctx.logger
