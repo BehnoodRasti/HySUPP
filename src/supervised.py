@@ -8,7 +8,7 @@ import numpy as np
 
 from src.data.utils import SVD_projection
 from src.utils.aligners import AbundancesAligner
-from src.utils.metrics import SRE, SADDegrees, aRMSE, compute_metric
+from src.utils.metrics import SRE, SADDegrees, aRMSE, eRMSE, compute_metric
 from src.data.base import Estimate
 
 log = logging.getLogger(__name__)
@@ -62,34 +62,49 @@ def main(ctx: mlxp.Context) -> None:
         E1 = aligner.transform_endmembers(E_hat)
         # Get labels
         labels = hsi.get_labels()
-        # Compute and log metrics
         logger.log_metrics(
-            {
-                "SRE": compute_metric(
-                    SRE(),
-                    A_gt,
-                    A1,
-                    labels,
-                    detail=False,
-                    on_endmembers=False,
-                ),
-                "RMSE": compute_metric(
-                    aRMSE(),
-                    A_gt,
-                    A1,
-                    labels,
-                    detail=True,
-                    on_endmembers=False,
-                ),
-                "SAD": compute_metric(
-                    SADDegrees(),
-                    E_gt,
-                    E1,
-                    labels,
-                    detail=True,
-                    on_endmembers=True,
-                ),
-            },
-            log_name="result",
+            compute_metric(
+                SRE(),
+                A_gt,
+                A1,
+                labels,
+                detail=False,
+                on_endmembers=False,
+            ),
+            log_name="SRE",
         )
+        logger.log_metrics(
+            compute_metric(
+                aRMSE(),
+                A_gt,
+                A1,
+                labels,
+                detail=True,
+                on_endmembers=False,
+            ),
+            log_name="aRMSE",
+        )
+        logger.log_metrics(
+            compute_metric(
+                SADDegrees(),
+                E_gt,
+                E1,
+                labels,
+                detail=True,
+                on_endmembers=True,
+            ),
+            log_name="SAD",
+        )
+        logger.log_metrics(
+            compute_metric(
+                eRMSE(),
+                E_gt,
+                E1,
+                labels,
+                detail=True,
+                on_endmembers=True,
+            ),
+            log_name="eRMSE",
+        )
+
     log.info("Supervised Unmixing - [END]...")

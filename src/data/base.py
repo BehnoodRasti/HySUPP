@@ -10,7 +10,7 @@ from dataclasses import dataclass
 import scipy.io as sio
 import numpy as np
 import matplotlib.pyplot as plt
-from mlxpy.data_structures.artifacts import Artifact
+from mlxp.data_structures.artifacts import Artifact
 
 from src import EPS
 

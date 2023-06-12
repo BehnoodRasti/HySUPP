@@ -57,24 +57,25 @@ def main(ctx: mlxp.Context) -> None:
         labels = hsi.get_labels()
         # Compute and log metrics
         logger.log_metrics(
-            {
-                "SRE": compute_metric(
-                    SRE(),
-                    A_gt,
-                    A1,
-                    labels,
-                    detail=False,
-                    on_endmembers=False,
-                ),
-                "RMSE": compute_metric(
-                    aRMSE(),
-                    A_gt,
-                    A1,
-                    labels,
-                    detail=True,
-                    on_endmembers=False,
-                ),
-            },
-            log_name="result",
+            compute_metric(
+                SRE(),
+                A_gt,
+                A1,
+                labels,
+                detail=False,
+                on_endmembers=False,
+            ),
+            log_name="SRE",
+        )
+        logger.log_metrics(
+            compute_metric(
+                aRMSE(),
+                A_gt,
+                A1,
+                labels,
+                detail=True,
+                on_endmembers=False,
+            ),
+            log_name="aRMSE",
         )
     log.info(f"Semi-Supervised Unmixing - [END]")
