@@ -8,7 +8,7 @@ An open-source **Hy**per**S**pectral **U**nmixing **P**ython **P**ackage
 
 HySUPP is an open-source Python toolbox for hyperspectral unmixing practitioners.
 
-## HySUPP in numbers
+## HySUPP key numbers
 
 * 3 unmixing categories
 * 20 unmixing methods
