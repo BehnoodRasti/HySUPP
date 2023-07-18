@@ -54,6 +54,9 @@ Change directory and install the required Python packages.
 cd HySUPP && pip install -r requirements.txt
 ```
 
+If you encounter any issue when installing `spams`, we recommend reading the Installation section [here](https://pypi.org/project/spams/).
+
+
 ## Getting started
 
 This toolbox uses [MLXP](https://inria-thoth.github.io/mlxp/) to manage multiple experiments built on top of [hydra](https://hydra.cc/).
