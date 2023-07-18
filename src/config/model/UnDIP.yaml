@@ -1,5 +1,0 @@
-_target_: src.model.supervised.UnDIP
-niters: 3000
-lr: 0.001
-exp_weight: 0.99
-noisy_input: True

@@ -1,0 +1,4 @@
+# _target_: src.model.sparse.SUnAA
+name: src.model.semisupervised.SUnAA
+T: 500
+low_rank: False

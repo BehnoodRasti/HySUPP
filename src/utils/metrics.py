@@ -7,8 +7,8 @@ import numpy as np
 import numpy.linalg as LA
 import pandas as pd
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
 
 class BaseMetric:
@@ -107,6 +107,24 @@ class SRE(BaseMetric):
         return 20 * np.log10(LA.norm(Xref, "fro") / LA.norm(Xref - X, "fro"))
 
 
+def compute_metric(metric, X_gt, X_hat, labels, detail=True, on_endmembers=False):
+    """
+    Return individual and global metric
+    """
+    d = {}
+    d["Overall"] = round(metric(X_hat, X_gt), 4)
+    if detail:
+        for ii, label in enumerate(labels):
+            if on_endmembers:
+                x_gt, x_hat = X_gt[:, ii][:, None], X_hat[:, ii][:, None]
+                d[label] = round(metric(x_hat, x_gt), 4)
+            else:
+                d[label] = round(metric(X_hat[ii], X_gt[ii]), 4)
+
+    log.info(f"{metric} => {d}")
+    return d
+
+
 class RunAggregator:
     def __init__(
         self,
@@ -137,14 +155,14 @@ class RunAggregator:
                 else:
                     d[label] = self.metric(X[ii], Xhat[ii])
 
-        logger.debug(f"Run {run}: {self.metric} => {d}")
+        log.debug(f"Run {run}: {self.metric} => {d}")
 
         self.data[run] = d
 
     def aggregate(self, prefix=None):
         self.df = pd.DataFrame(self.data).T
         self.summary = self.df.describe().round(2)
-        logger.info(f"{self.metric} summary:\n{self.summary}")
+        log.info(f"{self.metric} summary:\n{self.summary}")
         self.save(prefix)
 
     def save(self, prefix=None):

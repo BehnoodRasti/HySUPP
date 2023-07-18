@@ -1,0 +1,5 @@
+name: src.model.blind.BayesianSMA
+root_matlab: ${MATLAB_root}
+Nmc: 100
+bool_plot: 0
+Tgeo_method: "vca"

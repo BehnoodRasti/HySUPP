@@ -20,25 +20,20 @@ logger.setLevel(logging.DEBUG)
 class UnDIP(nn.Module, SupervisedUnmixingModel):
     def __init__(
         self,
-        hsi,
         niters=3000,
         lr=0.001,
         exp_weight=0.99,
         noisy_input=True,
+        kernel_size=3,
     ):
         super().__init__()
-
-        # Hyperparameters
-        self.L = hsi.L  # number of channels
-        self.p = hsi.p  # number of endmembers
-        self.H = hsi.H  # number of lines
-        self.W = hsi.W  # number of samples per line
 
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu",
         )
 
-        self.kernel_sizes = [3, 3, 3, 1, 1, 1]
+        self.kernel_sizes = [kernel_size] * 3 + [1] * 3
+        # self.kernel_sizes = [3, 3, 3, 1, 1, 1]
         self.strides = [2, 1, 1, 1, 1, 1]
         self.padding = [(k - 1) // 2 for k in self.kernel_sizes]
 
@@ -141,9 +136,17 @@ class UnDIP(nn.Module, SupervisedUnmixingModel):
 
         return torch.cat(inputs_, dim=1)
 
-    def compute_abundances(self, Y, E, seed=0, *args, **kwargs):
+    def compute_abundances(self, Y, E, H, W, seed=0, *args, **kwargs):
         tic = time.time()
         logger.debug("Solving started...")
+
+        L, N = Y.shape
+        L, p = E.shape
+        # Hyperparameters
+        self.L = L  # number of channels
+        self.p = p  # number of endmembers
+        self.H = H  # number of lines
+        self.W = W  # number of samples per line
 
         self.init_architecture(seed=seed)
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)

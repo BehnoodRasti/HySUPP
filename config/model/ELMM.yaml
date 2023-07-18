@@ -1,0 +1,15 @@
+name: src.model.blind.ELMM
+root_matlab: ${MATLAB_root}
+lambda_s: 0.5
+lambda_a: 0.01
+lambda_psi: 0.05
+norm: "1,1"
+verbose: False
+maxiter_anls: 100
+maxiter_admm: 100
+eps_s: 0.001
+eps_a: 0.001
+eps_psi: 0.001
+eps_admm_abs: 0.01
+eps_admm_rel: 0.01
+

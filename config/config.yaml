@@ -1,0 +1,41 @@
+mode: "blind"
+seed: 0
+projection: False
+l2_normalization: False
+force_align: False
+
+defaults:
+  - noise: AWGN
+  - data: Cuprite
+  - model: AA
+  - extractor: VCA
+  - _self_
+
+# MATLAB
+# MATLAB_root: "/home/clear/matlab/"
+MATLAB_root: "/home/clear/azouaoui/code/matlab/"
+DATA_dir: "./data/"
+FIGS_dir: "./figs/"
+
+###########
+# Logging #
+###########
+version: 1
+formatters:
+  simple:
+    format: "%(asctime)s - %(name)s - [%(levelname)s] - %(message)s"
+    datefmt: "%d-%b-%y %H:%M:%S"
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+loggers:
+  sampleLogger:
+    level: DEBUG
+    handlers: [console]
+    propagate: yes
+root:
+  level: DEBUG
+  handlers: [console]

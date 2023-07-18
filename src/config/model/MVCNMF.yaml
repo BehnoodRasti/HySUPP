@@ -1,6 +1,0 @@
-_target_: src.model.blind.MVCNMF
-regularization: 0.5
-constraint: 1
-learning_rate: 100
-max_iter: 25
-scaling: 0.5

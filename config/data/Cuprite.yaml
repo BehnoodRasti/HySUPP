@@ -1,0 +1,5 @@
+name: src.data.base.RealHSI
+dataset: "Cuprite"
+p: 12
+data_dir: ${DATA_dir}
+figs_dir: ${FIGS_dir}

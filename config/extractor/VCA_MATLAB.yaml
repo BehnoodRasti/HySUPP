@@ -1,0 +1,3 @@
+# _target_: src.model.extractors.VCA_MATLAB
+name: src.model.extractors.VCA_MATLAB
+root_matlab: ${MATLAB_root}

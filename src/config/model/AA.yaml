@@ -1,8 +1,0 @@
-_target_: src.model.blind.ArchetypalAnalysis
-epsilon: 1e-3
-robust: False
-computeXtX: True
-stepsFISTA: 3
-stepsAS: 50
-randominit: True
-numThreads: -1

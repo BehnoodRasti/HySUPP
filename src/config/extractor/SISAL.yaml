@@ -1,2 +1,0 @@
-_target_: src.model.extractors.SISAL
-root_matlab: ${MATLAB_root}

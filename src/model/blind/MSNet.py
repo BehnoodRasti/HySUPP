@@ -25,7 +25,6 @@ logger.setLevel(logging.DEBUG)
 class MSNet(nn.Module, BlindUnmixingModel):
     def __init__(
         self,
-        hsi,
         epochs=800,
         alpha=0.1,
         beta=0.03,
@@ -38,13 +37,6 @@ class MSNet(nn.Module, BlindUnmixingModel):
         **kwargs,
     ):
         super().__init__()
-
-        # Hyperparameters
-        self.L = hsi.L  # number of channels
-        self.p = hsi.p  # number of endmembers
-        self.H = hsi.H  # number of lines
-        self.W = hsi.W  # number of samples per line
-        self.N = hsi.N  # number of pixels
 
         self.epochs = epochs
 
@@ -59,12 +51,6 @@ class MSNet(nn.Module, BlindUnmixingModel):
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu",
         )
-
-        k = torch.Tensor([[0.05, 0.25, 0.40, 0.25, 0.05]])
-        kernel = torch.matmul(k.t(), k).unsqueeze(0).repeat(self.p, 1, 1, 1)
-        self.kernel = kernel.to(self.device)
-        self.down22 = nn.AvgPool2d(2, 2, ceil_mode=True)
-        self.eps = 1e-3
 
     def laplacian_kernel(self, current):
         filtered = self.conv_gauss(current)  # filter
@@ -87,6 +73,12 @@ class MSNet(nn.Module, BlindUnmixingModel):
     ):
         # Set random seed
         torch.manual_seed(seed)
+
+        k = torch.Tensor([[0.05, 0.25, 0.40, 0.25, 0.05]])
+        kernel = torch.matmul(k.t(), k).unsqueeze(0).repeat(self.p, 1, 1, 1)
+        self.kernel = kernel.to(self.device)
+        self.down22 = nn.AvgPool2d(2, 2, ceil_mode=True)
+        self.eps = 1e-3
 
         self.layer1 = nn.Sequential(
             nn.Conv2d(self.L + self.p, 96, kernel_size=3, stride=1, padding=1),
@@ -204,12 +196,23 @@ class MSNet(nn.Module, BlindUnmixingModel):
         self,
         Y,
         p,
+        H,
+        W,
         seed=0,
         *args,
         **kwargs,
     ):
         tic = time.time()
         logger.debug("Solving started...")
+
+        L, N = Y.shape
+
+        # Hyperparameters
+        self.L = L  # number of channels
+        self.p = p  # number of endmembers
+        self.H = H  # number of lines
+        self.W = W  # number of samples per line
+        self.N = N  # number of pixels
 
         self.init_architecture(seed=seed)
 

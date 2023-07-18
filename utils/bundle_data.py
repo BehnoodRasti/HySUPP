@@ -28,6 +28,12 @@ def main(args):
         D = sio.loadmat(os.path.join(base_dir, as_matlab(args.dictionary)))[
             args.dictionary
         ]
+        if args.index is not None:
+            index = list(
+                sio.loadmat(os.path.join(base_dir, as_matlab(args.index)))[
+                    args.index
+                ].squeeze()
+            )
 
     if args.height is not None:
         H = args.H
@@ -68,8 +74,6 @@ def main(args):
     else:
         raise ValueError("Invalid shape for Y...")
 
-    breakpoint()
-
     if len(A.shape) == 3:
         if A.shape[0] == p:
             assert A.shape[1] * A.shape[2] == N
@@ -100,6 +104,9 @@ def main(args):
     if args.dictionary is not None:
         data["D"] = D
         data["M"] = D.shape[0] if D.shape[1] == L else D.shape[1]
+        if args.index is not None:
+            assert len(index) == p
+            data["index"] = index
 
     sio.savemat(f"./data/{args.name}.mat", data)
 
@@ -113,6 +120,7 @@ if __name__ == "__main__":
     parser.add_argument("--endmembers", "-E", required=True)
     parser.add_argument("--abundances", "-A", required=True)
     parser.add_argument("--dictionary", "-D", required=False, default=None)
+    parser.add_argument("--index", "-I", required=False, default=None)
     parser.add_argument("--height", "-H", required=False, default=None)
     parser.add_argument("--width", "-W", required=False, default=None)
 

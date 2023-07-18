@@ -1,0 +1,8 @@
+name: src.model.blind.ADMMNet
+lr: 0.0001
+batchsize: 64
+epochs: 300
+nblocks: 2
+lambd: 0.001
+mu: 0.01
+tied: False

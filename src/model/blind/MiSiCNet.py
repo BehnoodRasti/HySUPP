@@ -21,27 +21,21 @@ logger.setLevel(logging.DEBUG)
 class MiSiCNet(nn.Module, BlindUnmixingModel):
     def __init__(
         self,
-        hsi,
         niters=8000,
         lr=0.001,
         exp_weight=0.99,
         lambd=100.0,
+        kernel_size=3,
         *args,
         **kwargs,
     ):
         super().__init__()
 
-        # Hyperparameters
-        self.L = hsi.L  # number of channels
-        self.p = hsi.p  # number of endmembers
-        self.H = hsi.H  # number of lines
-        self.W = hsi.W  # number of samples per line
-
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu",
         )
 
-        self.kernel_sizes = [3, 3, 3, 3, 1]
+        self.kernel_sizes = [kernel_size] * 4 + [1]
         self.strides = [1, 1, 1, 1, 1]
         self.padding = [(k - 1) // 2 for k in self.kernel_sizes]
 
@@ -54,7 +48,6 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
         self.lr = lr
         self.exp_weight = exp_weight
         self.lambd = lambd
-        self.hsi = hsi
 
     def init_architecture(
         self,
@@ -70,12 +63,12 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
             nn.LeakyReLU(**self.lrelu_params),
         )
 
-        # self.layer2 = nn.Sequential(
-        #     nn.ReflectionPad2d(self.padding[1]),
-        #     nn.Conv2d(256, 256, self.kernel_sizes[1], stride=self.strides[1]),
-        #     nn.BatchNorm2d(256),
-        #     nn.LeakyReLU(**self.lrelu_params),
-        # )
+        self.layer2 = nn.Sequential(
+            nn.ReflectionPad2d(self.padding[1]),
+            nn.Conv2d(256, 256, self.kernel_sizes[1], stride=self.strides[1]),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(**self.lrelu_params),
+        )
 
         self.layerskip = nn.Sequential(
             nn.ReflectionPad2d(self.padding[-1]),
@@ -126,9 +119,17 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
 
         return fit_term + self.lambd * reg_term
 
-    def compute_endmembers_and_abundances(self, Y, p, seed=0, *args, **kwargs):
+    def compute_endmembers_and_abundances(self, Y, p, H, W, seed=0, *args, **kwargs):
         tic = time.time()
         logger.debug("Solving started...")
+
+        L, N = Y.shape
+
+        # Hyperparameters
+        self.L = L  # number of channels
+        self.p = p  # number of endmembers
+        self.H = H  # number of lines
+        self.W = W  # number of samples per line
 
         self.init_architecture(seed=seed)
 
