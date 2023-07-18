@@ -24,6 +24,7 @@ class UnDIP(nn.Module, SupervisedUnmixingModel):
         lr=0.001,
         exp_weight=0.99,
         noisy_input=True,
+        kernel_size=3,
     ):
         super().__init__()
 
@@ -31,7 +32,8 @@ class UnDIP(nn.Module, SupervisedUnmixingModel):
             "cuda:0" if torch.cuda.is_available() else "cpu",
         )
 
-        self.kernel_sizes = [3, 3, 3, 1, 1, 1]
+        self.kernel_sizes = [kernel_size] * 3 + [1] * 3
+        # self.kernel_sizes = [3, 3, 3, 1, 1, 1]
         self.strides = [2, 1, 1, 1, 1, 1]
         self.padding = [(k - 1) // 2 for k in self.kernel_sizes]
 

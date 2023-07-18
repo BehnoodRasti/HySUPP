@@ -38,8 +38,8 @@ def unmixing(ctx: mlxp.Context) -> None:
         from src.supervised import main as _main
     elif mode == "semi":
         from src.semisupervised import main as _main
-    # elif mode == "extract":
-    #     from src.extract import main as _main
+    elif mode == "pruning":
+        from src.pruning import main as _main
     else:
         raise ValueError(f"Mode {mode} is invalid")
 

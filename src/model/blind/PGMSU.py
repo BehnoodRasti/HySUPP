@@ -23,7 +23,6 @@ logger.setLevel(logging.DEBUG)
 class PGMSU(nn.Module, BlindUnmixingModel):
     def __init__(
         self,
-        hsi,
         z_dim=4,
         lr=1e-3,
         epochs=200,
@@ -35,15 +34,9 @@ class PGMSU(nn.Module, BlindUnmixingModel):
     ):
         super().__init__()
 
-        # Hyperparameters
-        self.L = hsi.L  # number of channels
-        self.p = hsi.p  # number of endmembers
-        self.N = hsi.N  # number of pixels
-
         self.z_dim = z_dim  # VAE code size
         self.lr = lr
         self.epochs = epochs
-        self.batchsz = self.N // 10
 
         self.lambda_kl = lambda_kl
         self.lambda_sad = lambda_sad
@@ -182,6 +175,14 @@ class PGMSU(nn.Module, BlindUnmixingModel):
     def compute_endmembers_and_abundances(self, Y, p, seed=0, *args, **kwargs):
         tic = time.time()
         logger.debug("Solving started...")
+
+        L, N = Y.shape
+        # Hyperparameters
+        self.L = L  # number of channels
+        self.p = p  # number of endmembers
+        self.N = N  # number of pixels
+
+        self.batchsz = self.N // 10
 
         self.init_architecture(seed=seed)
 

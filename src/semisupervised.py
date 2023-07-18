@@ -8,6 +8,7 @@ import numpy as np
 
 from src.data.utils import SVD_projection
 from src.utils.metrics import SRE, aRMSE, compute_metric
+from src.utils.aligners import AbundancesAligner
 from src.data.base import Estimate
 
 log = logging.getLogger(__name__)
@@ -51,8 +52,13 @@ def main(ctx: mlxp.Context) -> None:
         # NOTE: Alignment not needed
         # Select only the first relevant components
         # NOTE Fix this code by using a custom index tied to the dataset
-        index = hsi.get_index()
-        A1 = A_hat[index]
+        # TODO align abundances for MUSIC_CSR
+        if cfg.force_align:
+            aligner = AbundancesAligner(Aref=A_gt)
+            A1 = aligner.fit_transform(A_hat)
+        else:
+            index = hsi.get_index()
+            A1 = A_hat[index]
         # Get labels
         labels = hsi.get_labels()
         # Compute and log metrics

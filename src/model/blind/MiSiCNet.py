@@ -25,6 +25,7 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
         lr=0.001,
         exp_weight=0.99,
         lambd=100.0,
+        kernel_size=3,
         *args,
         **kwargs,
     ):
@@ -34,7 +35,7 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
             "cuda:0" if torch.cuda.is_available() else "cpu",
         )
 
-        self.kernel_sizes = [3, 3, 3, 3, 1]
+        self.kernel_sizes = [kernel_size] * 4 + [1]
         self.strides = [1, 1, 1, 1, 1]
         self.padding = [(k - 1) // 2 for k in self.kernel_sizes]
 
@@ -62,12 +63,12 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
             nn.LeakyReLU(**self.lrelu_params),
         )
 
-        # self.layer2 = nn.Sequential(
-        #     nn.ReflectionPad2d(self.padding[1]),
-        #     nn.Conv2d(256, 256, self.kernel_sizes[1], stride=self.strides[1]),
-        #     nn.BatchNorm2d(256),
-        #     nn.LeakyReLU(**self.lrelu_params),
-        # )
+        self.layer2 = nn.Sequential(
+            nn.ReflectionPad2d(self.padding[1]),
+            nn.Conv2d(256, 256, self.kernel_sizes[1], stride=self.strides[1]),
+            nn.BatchNorm2d(256),
+            nn.LeakyReLU(**self.lrelu_params),
+        )
 
         self.layerskip = nn.Sequential(
             nn.ReflectionPad2d(self.padding[-1]),

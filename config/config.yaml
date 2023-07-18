@@ -2,6 +2,7 @@ mode: "blind"
 seed: 0
 projection: False
 l2_normalization: False
+force_align: False
 
 defaults:
   - noise: AWGN

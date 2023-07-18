@@ -173,6 +173,7 @@ class ADMMNet(nn.Module, BlindUnmixingModel):
         self.train()
 
         for ii in progress:
+            running_loss = 0
             for x, y in enumerate(dataloader):
                 y = y[0].to(self.device)
 
@@ -183,9 +184,13 @@ class ADMMNet(nn.Module, BlindUnmixingModel):
                 loss.backward()
                 optimizer.step()
 
+                running_loss += loss.item()
+
                 # Enforce non-negativity on endmembers
                 self.decoder.weight.data[self.decoder.weight <= 0] = 0
                 self.decoder.weight.data[self.decoder.weight >= 1] = 1
+
+            progress.set_postfix_str(f"loss={running_loss:.2e}")
 
         self.eval()
         with torch.no_grad():

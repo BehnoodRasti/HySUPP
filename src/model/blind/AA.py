@@ -115,6 +115,9 @@ class EDAA(BlindUnmixingModel):
 
         _, N = Y.shape
 
+        def loss(a, b):
+            return 0.5 * ((Y - (Y @ b) @ a) ** 2).sum()
+
         def residual_l1(a, b):
             return (Y - (Y @ b) @ a).abs().sum()
 
@@ -178,6 +181,7 @@ class EDAA(BlindUnmixingModel):
                         B = update(B, -self.etaB * grad_B(A, B))
 
                 fit_m = residual_l1(A, B).item()
+                # fit_m = loss(A, B).item()
                 E = (Y @ B).cpu().numpy()
                 A = A.cpu().numpy()
                 B = B.cpu().numpy()

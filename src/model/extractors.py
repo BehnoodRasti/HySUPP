@@ -440,7 +440,8 @@ class SISAL(BaseExtractor):
                 snr_input = kwargs[key]
             else:
                 # Hmmm, something wrong with the parameter string
-                raise ValueError("Unrecognized option: {}".format(key))
+                # raise ValueError("Unrecognized option: {}".format(key))
+                pass
 
         ##
         # --------------------------------------------------------------

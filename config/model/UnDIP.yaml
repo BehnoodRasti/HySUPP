@@ -4,3 +4,4 @@ niters: 3000
 lr: 0.001
 exp_weight: 0.99
 noisy_input: True
+kernel_size: 3
