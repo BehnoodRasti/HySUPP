@@ -1,3 +1,0 @@
-# _target_: src.model.sparse.S2WSU_MATLAB
-name: src.model.semisupervised.S2WSU_MATLAB
-lambd: 1e-3

@@ -1,4 +1,0 @@
-name: src.data.base.HSIWithGT
-dataset: "Sim1"
-data_dir: ${DATA_dir}
-figs_dir: ${FIGS_dir}
