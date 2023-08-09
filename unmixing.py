@@ -5,7 +5,6 @@ Toolbox main file managed by mlxpy to handle experiments configurations
 import logging
 import logging.config
 
-import yaml
 import mlxp
 
 
@@ -45,7 +44,7 @@ def unmixing(ctx: mlxp.Context) -> None:
 
     try:
         _main(ctx)
-    except Exception as e:
+    except Exception:
         log.error("Exception occured", exc_info=True)
 
 
