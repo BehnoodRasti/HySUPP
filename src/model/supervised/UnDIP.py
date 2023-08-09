@@ -151,10 +151,10 @@ class UnDIP(nn.Module, SupervisedUnmixingModel):
         self.init_architecture(seed=seed)
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
 
-        l, h, w = self.L, self.H, self.W
+        num_channels, h, w = self.L, self.H, self.W
 
         Y = torch.Tensor(Y)
-        Y = Y.view(1, l, h, w)
+        Y = Y.view(1, num_channels, h, w)
 
         self = self.to(self.device)
         Y = Y.to(self.device)

@@ -84,4 +84,4 @@ def main(ctx: mlxp.Context) -> None:
             ),
             log_name="aRMSE",
         )
-    log.info(f"Semi-Supervised Unmixing - [END]")
+    log.info("Semi-Supervised Unmixing - [END]")

@@ -6,7 +6,6 @@ import logging
 import time
 
 from tqdm import tqdm
-import numpy as np
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
@@ -129,7 +128,7 @@ class ADMMNet(nn.Module, BlindUnmixingModel):
         self.decoder.weight.data = A_init
 
     def forward(self, y):
-        bs, l = y.shape
+        bs, _ = y.shape
         z = torch.zeros((bs, self.p)).to(self.device)
         d = torch.zeros((bs, self.p)).to(self.device)
         for ii in range(self.nblocks):

@@ -6,7 +6,6 @@ Source: https://github.com/etienne-monier/lib-unmixing/blob/master/unmixing.py
 
 import logging
 import time
-import os
 
 import numpy as np
 import numpy.linalg as LA
@@ -102,7 +101,7 @@ class SUnSAL_SpReg(SparseUnmixingModel):
         logger.debug(f"mu initial value: {mu:.3e}")
 
         UF, sF, VF = LA.svd(D.T @ D)
-        SF = np.diag(sF)
+        #SF = np.diag(sF)
         IF = UF @ (np.diag(1 / (sF + mu + self.beta))) @ UF.T
 
         Aux = IF @ B.T @ (LA.inv(B @ IF @ B.T))
@@ -232,7 +231,8 @@ class SUnSAL_SpReg(SparseUnmixingModel):
         # Generic SUnSAL
         else:
             logger.debug("Generic SUnSAL")
-            softthresh = lambda x, th: np.sign(x) * np.maximum(np.abs(x) - th, 0)
+            def softthresh(x, th):
+                return np.sign(x) * np.maximum(np.abs(x) - th, 0)
 
             while (i <= self.AL_iters) and (
                 (np.abs(res_p) > tol1) or (np.abs(res_d) > tol2)
@@ -371,7 +371,7 @@ class SUnSAL(SparseUnmixingModel):
         logger.debug(f"mu initial value: {mu:.3e}")
 
         UF, sF, VF = LA.svd(D.T @ D)
-        SF = np.diag(sF)
+        #SF = np.diag(sF)
         IF = UF @ (np.diag(1 / (sF + mu))) @ UF.T
 
         Aux = IF @ B.T @ (LA.inv(B @ IF @ B.T))
@@ -501,7 +501,8 @@ class SUnSAL(SparseUnmixingModel):
         # Generic SUnSAL
         else:
             logger.debug("Generic SUnSAL")
-            softthresh = lambda x, th: np.sign(x) * np.maximum(np.abs(x) - th, 0)
+            def softthresh(x, th):
+                return np.sign(x) * np.maximum(np.abs(x) - th, 0)
 
             while (i <= self.AL_iters) and (
                 (np.abs(res_p) > tol1) or (np.abs(res_d) > tol2)

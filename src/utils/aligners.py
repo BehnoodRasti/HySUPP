@@ -3,13 +3,13 @@ Aligners to align endmembers in order to compute metrics
 """
 import logging
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
 from .metrics import MSE
 
 import numpy as np
 from munkres import Munkres
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class BaseAligner:

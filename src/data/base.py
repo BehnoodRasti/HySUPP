@@ -2,7 +2,6 @@
 HSI data base class
 """
 import logging
-from typing import Any
 import os
 from dataclasses import dataclass
 

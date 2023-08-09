@@ -1,15 +1,6 @@
 """
 Model related globals
 """
-import warnings
-
-try:
-    import matlab.engine
-except Exception:
-    warnings.warn(
-        "`matlab.engine` was not imported. MATLAB related code will not work."
-    )
-
 
 class UnmixingModel:
     def __init__(self):

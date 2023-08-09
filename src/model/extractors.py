@@ -4,7 +4,6 @@ Endmembers extractor methods
 
 import logging
 import warnings
-import sys
 import os
 import time
 
@@ -15,7 +14,6 @@ import numpy.linalg as lin
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-from src import EPS
 
 try:
     import matlab.engine
@@ -74,8 +72,10 @@ class VCA(BaseExtractor):
 
         This code is a translation of a matlab code provided by
         Jose Nascimento (zen@isel.pt) and Jose Bioucas Dias (bioucas@lx.it.pt)
-        available at http://www.lx.it.pt/~bioucas/code.htm under a non-specified Copyright (c)
-        Translation of last version at 22-February-2018 (Matlab version 2.1 (7-May-2004))
+        available at http://www.lx.it.pt/~bioucas/code.htm
+        under a non-specified Copyright (c)
+        Translation of last version at 22-February-2018 
+        (Matlab version 2.1 (7-May-2004))
 
         more details on:
         Jose M. P. Nascimento and Jose M. B. Dias
@@ -204,20 +204,20 @@ class SiVM(BaseExtractor):
         O1 = np.ones((1, 1))
         # Find farthest point
         d = np.zeros((p, N))
-        I = np.zeros((p, 1))
+        index = np.zeros((p, 1))
         V = np.zeros((1, N))
         ZD = np.zeros((D, 1))
         for i in range(N):
             d[0, i] = self.Eucli_dist(x[:, i].reshape(D, 1), ZD)
 
-        I = np.argmax(d[0, :])
+        index = np.argmax(d[0, :])
 
         for i in range(N):
-            d[0, i] = self.Eucli_dist(x[:, i].reshape(D, 1), x[:, I].reshape(D, 1))
+            d[0, i] = self.Eucli_dist(x[:, i].reshape(D, 1), x[:, index].reshape(D, 1))
 
         for v in range(1, p):
             D1 = np.concatenate(
-                (d[0:v, I].reshape((v, I.size)), np.ones((v, 1))), axis=1
+                (d[0:v, index].reshape((v, index.size)), np.ones((v, 1))), axis=1
             )
             D2 = np.concatenate((np.ones((1, v)), Z1), axis=1)
             D4 = np.concatenate((D1, D2), axis=0)
@@ -227,17 +227,17 @@ class SiVM(BaseExtractor):
                 D3 = np.concatenate((d[0:v, i].reshape((v, 1)), O1), axis=0)
                 V[0, i] = np.dot(np.dot(D3.T, D4), D3)
 
-            I = np.append(I, np.argmax(V))
+            index = np.append(index, np.argmax(V))
             for i in range(N):
                 d[v, i] = self.Eucli_dist(
-                    x[:, i].reshape(D, 1), x[:, I[v]].reshape(D, 1)
+                    x[:, i].reshape(D, 1), x[:, index[v]].reshape(D, 1)
                 )
 
-        per = np.argsort(I)
-        I = np.sort(I)
+        per = np.argsort(index)
+        index = np.sort(index)
         d = d[per, :]
-        E = x[:, I]
-        logger.debug(f"Indices chosen: {I}")
+        E = x[:, index]
+        logger.debug(f"Indices chosen: {index}")
         return E
 
 
@@ -302,7 +302,8 @@ class SISAL(BaseExtractor):
         mu - Augmented Lagrange regularization parameter
             Default: 1
 
-        spherize - {True, False} Applies a spherization step to data such that the spherized
+        spherize - {True, False} 
+                Applies a spherization step to data such that the spherized
                 data spans over the same range along any axis.
                 Default: True
 
@@ -343,7 +344,8 @@ class SISAL(BaseExtractor):
 
         This code is an improvement over a translation of a matlab code provided by
         Jose Nascimento (zen@isel.pt) and Jose Bioucas Dias (bioucas@lx.it.pt)
-        available at http://www.lx.it.pt/~bioucas/code.htm under a non-specified Copyright (c)
+        available at http://www.lx.it.pt/~bioucas/code.htm 
+        under a non-specified Copyright (c)
         Translation of last version at 20-April-2018 (Matlab version 2.1 (7-May-2004))
         Improvements made on 07-Feb-2023.
 
@@ -392,18 +394,18 @@ class SISAL(BaseExtractor):
         # no initial simplex
         M = 0
         # tolerance for the termination test
-        tol_f = 1e-2
+        #tol_f = 1e-2
 
         ##
         # --------------------------------------------------------------
         # Local variables
         # --------------------------------------------------------------
         # maximum violation of inequalities
-        slack = 1e-3
+        #slack = 1e-3
         # flag energy decreasing
-        energy_decreasing = 0
+        #energy_decreasing = 0
         # used in the termination test
-        f_val_back = float("inf")
+        #f_val_back = float("inf")
         #
         # spherization regularization parameter
         lam_sphe = 1e-8
@@ -413,7 +415,7 @@ class SISAL(BaseExtractor):
         # minimum number of AL iterations per quadratic problem
         AL_iters = 4
         # flag
-        flaged = 0
+        #flaged = 0
 
         # --------------------------------------------------------------
         # Read the optional parameters
@@ -430,8 +432,8 @@ class SISAL(BaseExtractor):
                 mu = kwargs[key]
             elif Ukey == "TAU":
                 tau = kwargs[key]
-            elif Ukey == "TOLF":
-                tol_f = kwargs[key]
+        #    elif Ukey == "TOLF":
+        #        tol_f = kwargs[key]
             elif Ukey == "M0":
                 M = kwargs[key]
             elif Ukey == "VERBOSE":
@@ -557,7 +559,8 @@ class SISAL(BaseExtractor):
         Z = Q @ Y
         Bk = 0 * Z
 
-        hinge = lambda x: np.maximum(-x, 0)
+        def hinge(x):
+            return np.maximum(-x, 0)
 
         # NOTE Matlab uses column-major mode ('F' for Fortran) for flattening
         for k in range(MMiters):
@@ -640,8 +643,8 @@ class SISAL(BaseExtractor):
                 )
                 if verbose == 3 or verbose == 4:
                     logger.debug(
-                        "MMiter = {0}, AL_iter, = {1},  f0_quad = {2:.4e}, f_quad = {3:.4e},".format(
-                            k, i, f0_quad, f_quad
+    "MMiter = {0}, AL_iter, = {1},  f0_quad = {2:.4e}, f_quad = {3:.4e},".format(
+                    k, i, f0_quad, f_quad
                         )
                     )
 
@@ -651,7 +654,7 @@ class SISAL(BaseExtractor):
                     while f0_val < f_val:
                         if verbose == 3 or verbose == 4:
                             logger.debug(
-                                "line search, MMiter = {0}, AL_iter, = {1},  f0_val = {2:.4e}, f_val = {3:.4e},".format(
+"line search, MMiter = {0}, AL_iter, = {1},  f0_val = {2:.4e}, f_val = {3:.4e},".format(
                                     k, i, f0_val, f_val
                                 )
                             )

@@ -109,9 +109,9 @@ class CNNAEU(nn.Module, BlindUnmixingModel):
 
         self.init_architecture(seed=seed)
 
-        l, h, w = self.L, self.H, self.W
+        num_channels, h, w = self.L, self.H, self.W
 
-        Y_numpy = Y.reshape((l, h, w)).transpose((1, 2, 0))
+        Y_numpy = Y.reshape((num_channels, h, w)).transpose((1, 2, 0))
 
         logger.info(f"{self.num_patches} patches extracted...")
         input_patches = extract_patches_2d(
@@ -154,7 +154,7 @@ class CNNAEU(nn.Module, BlindUnmixingModel):
         # Get final abundances and endmembers
         self.eval()
 
-        Y_eval = torch.Tensor(Y.reshape((1, l, h, w))).to(self.device)
+        Y_eval = torch.Tensor(Y.reshape((1, num_channels, h, w))).to(self.device)
 
         abund, _ = self(Y_eval)
 

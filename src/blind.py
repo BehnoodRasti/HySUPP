@@ -18,7 +18,7 @@ def main(ctx: mlxp.Context) -> None:
 
     cfg = ctx.config
     logger = ctx.logger
-    log.info(f"Blind Unmixing - [START]")
+    log.info("Blind Unmixing - [START]")
 
     # Get noise
     noise = _instance_from_config(cfg.noise)
@@ -36,7 +36,8 @@ def main(ctx: mlxp.Context) -> None:
     Y = noise.apply(Y)
     # L2 normalization
     if cfg.l2_normalization:
-        Y = Y / np.linalg.norm(Y, axis=0, ord=2, keepdims=True)
+        normY = np.linalg.norm(Y, axis=0, ord=2, keepdims=True)
+        Y = Y / normY
     # Apply SVD projection
     if cfg.projection:
         Y = SVD_projection(Y, p)
@@ -107,4 +108,4 @@ def main(ctx: mlxp.Context) -> None:
             log_name="eRMSE",
         )
 
-    log.info(f"Blind Unmixing - [END]")
+    log.info("Blind Unmixing - [END]")

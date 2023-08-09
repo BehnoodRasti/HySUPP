@@ -5,7 +5,7 @@ import logging
 
 from hydra.utils import instantiate
 
-from src.model.extractors import SISAL, VCA, SiVM
+from src.model.extractors import VCA, SiVM
 from sklearn.cluster import KMeans
 import numpy as np
 

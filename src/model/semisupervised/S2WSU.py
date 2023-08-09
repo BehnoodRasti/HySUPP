@@ -9,8 +9,6 @@ import time
 
 import numpy as np
 import numpy.linalg as LA
-import torch.nn.functional as F
-import torch
 from scipy.signal import convolve2d
 
 from .base import SemiSupervisedUnmixingModel as SparseUnmixingModel
@@ -117,8 +115,8 @@ class S2WSU(SparseUnmixingModel):
 
             while (i <= self.AL_iters) and np.abs(res_p) > tol:
                 # Save u to be used later
-                if i % 10 == 1:
-                    u0 = u
+                #if i % 10 == 1:
+                #    u0 = u
 
                 # Minimize w.r.t. u
                 u = AA @ (D.T @ (v1 + d1) + v2 + d2 + v3 + d3)

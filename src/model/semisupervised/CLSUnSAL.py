@@ -108,7 +108,8 @@ class CLSUnSAL(SparseUnmixingModel):
             v1 = (Y + mu * (D @ u - d1)) / (1 + mu)
 
             # Minimize w.r.t. v2
-            current_fn = lambda b: self.vect_soft_thresh(b, lambd / mu)
+            def current_fn(b):
+                return self.vect_soft_thresh(b, lambd / mu)
             v2 = np.apply_along_axis(current_fn, axis=1, arr=u - d2)
 
             # Minimize w.r.t. v3
@@ -127,7 +128,7 @@ class CLSUnSAL(SparseUnmixingModel):
                 res_d = mu * LA.norm(u - u0)
                 if self.verbose:
                     logger.info(
-                        f"k = {k}, res_p = {res_p:.3e}, res_d = {res_d:.3e}, mu = {mu:.3e}"
+            f"k = {k}, res_p = {res_p:.3e}, res_d = {res_d:.3e}, mu = {mu:.3e}"
                     )
 
                 # Update mu

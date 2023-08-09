@@ -67,11 +67,11 @@ class SUnAA(SparseUnmixingModel):
             A = np.array(spams.decompSimplex(YY, np.asfortranarray(D @ B)).todense())
             # logger.debug(f"A update => {loss(A, B):.2f}")
             progress.set_postfix_str(f"loss={loss(A, B):.2f}")
-            if np.isnan(loss(A, B)):
-                # Restart
-                pp = 0
-                B = (1 / N_atoms) * np.ones((N_atoms, self.p))
-                A = (1 / self.p) * np.ones((self.p, N))
+            #if np.isnan(loss(A, B)):
+            #    # Restart
+            #    pp = 0
+            #    B = (1 / N_atoms) * np.ones((N_atoms, self.p))
+            #    A = (1 / self.p) * np.ones((self.p, N))
 
         tac = time.time()
 

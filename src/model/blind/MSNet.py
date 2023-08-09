@@ -10,7 +10,6 @@ import time
 from math import ceil
 
 from tqdm import tqdm
-import numpy as np
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
@@ -227,10 +226,10 @@ class MSNet(nn.Module, BlindUnmixingModel):
         self.decoderlayer5.weight.data = Einit
         self.decoderlayer6.weight.data = Einit
 
-        l, h, w = self.L, self.H, self.W
+        num_channels, h, w = self.L, self.H, self.W
 
         Y = torch.Tensor(Y)
-        Y = Y.view(1, l, h, w)
+        Y = Y.view(1, num_channels, h, w)
 
         self = self.to(self.device)
         Y = Y.to(self.device)

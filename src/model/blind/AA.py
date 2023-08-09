@@ -137,7 +137,8 @@ class EDAA(BlindUnmixingModel):
             S = torch.linalg.svdvals(YB)
             return S[0] * S[0]
 
-        max_correl = lambda e: np.max(np.corrcoef(e.T) - np.eye(p))
+        def max_correl(e):
+            return np.max(np.corrcoef(e.T) - np.eye(p))
 
         results = {}
 

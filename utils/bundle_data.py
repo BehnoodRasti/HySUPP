@@ -8,13 +8,13 @@ It assumes that Sim1 is located in the $PROJECT_ROOT/data folder
 
 """
 
-import numpy as np
 import scipy.io as sio
 
 import os
 import argparse
 
-as_matlab = lambda key: f"{key}.mat"
+def as_matlab(key):
+    return f"{key}.mat"
 
 
 def main(args):

@@ -1,8 +1,6 @@
 import logging
 import time
-import os
 import numpy as np
-import numpy.linalg as LA
 from skimage.segmentation import slic
 
 from .base import SemiSupervisedUnmixingModel as SparseUnmixingModel

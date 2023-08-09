@@ -149,10 +149,10 @@ class SUnCNN(nn.Module, SparseUnmixingModel):
         self.init_architecture(seed=seed)
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
 
-        l, h, w = self.L, self.H, self.W
+        n_channels, h, w = self.L, self.H, self.W
 
         Y = torch.Tensor(Y)
-        Y = Y.view(1, l, h, w)
+        Y = Y.view(1, n_channels, h, w)
 
         self = self.to(self.device)
         Y = Y.to(self.device)

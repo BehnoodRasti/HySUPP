@@ -6,10 +6,8 @@ import logging
 import time
 
 from tqdm import tqdm
-import numpy as np
 import torch.nn as nn
 import torch
-import torch.nn.functional as F
 
 from .base import BlindUnmixingModel
 from src.model.extractors import SiVM
@@ -114,8 +112,8 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
         target_reshape = target.squeeze().reshape(L, N)
         fit_term = 0.5 * torch.linalg.norm(target_reshape.t() - output, "fro") ** 2
 
-        O = target_reshape.mean(1, keepdims=True)
-        reg_term = torch.linalg.norm(self.decoder.weight - O, "fro") ** 2
+        mean = target_reshape.mean(1, keepdims=True)
+        reg_term = torch.linalg.norm(self.decoder.weight - mean, "fro") ** 2
 
         return fit_term + self.lambd * reg_term
 
@@ -142,10 +140,10 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
         )
         self.decoder.weight.data = torch.Tensor(Ehat)
 
-        l, h, w = self.L, self.H, self.W
+        num_channels, h, w = self.L, self.H, self.W
 
         Y = torch.Tensor(Y)
-        Y = Y.view(1, l, h, w)
+        Y = Y.view(1, num_channels, h, w)
 
         self = self.to(self.device)
         Y = Y.to(self.device)
@@ -184,17 +182,3 @@ class MiSiCNet(nn.Module, BlindUnmixingModel):
         logger.info(self.print_time())
 
         return Ehat, Ahat
-
-
-def check_model():
-    from src.data.base import HSI
-
-    hsi = HSI("Sim1")
-    print(hsi)
-
-    model = MiSiCNet(hsi=hsi, niters=1000, lambd=0.1)
-    model.compute_endmembers_and_abundances(hsi.Y, hsi.p, seed=42)
-
-
-if __name__ == "__main__":
-    check_model()
