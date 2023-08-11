@@ -8,5 +8,4 @@ from .SUnCNN import SUnCNN
 from .SUnSAL import SUnSAL
 from .CLSUnSAL import CLSUnSAL
 from .S2WSU import S2WSU
-from .MUSIC_CSR import MUSIC_CSR
 from .MUA import MUA_SLIC
