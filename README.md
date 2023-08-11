@@ -13,7 +13,7 @@ HySUPP is an open-source Python toolbox for hyperspectral unmixing practitioners
 * 3 unmixing categories
 * 20 unmixing methods
 * 4 metrics
-* 6 simulated datasets (*soon to be released*)
+* 3 simulated datasets (*soon to be released*)
 
 ## License
 
@@ -70,7 +70,7 @@ There are a few required parameters to define in order to run an experiment:
 An example of a corresponding command line is simply:
 
 ```shell
-python main.py mode=semi data=DC1 model=SUnCNN noise.SNR=30
+python unmixing.py mode=semi data=DC1 model=SUnCNN noise.SNR=30
 ```
 
 ## Data
