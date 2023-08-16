@@ -5,6 +5,7 @@ munkres==1.1.4
 numpy==1.24.3
 pandas==2.0.2
 scikit-image==0.21.0
+scikit-learn==1.2.2
 scipy==1.9.3
 spams==2.6.5.4
 spectral==0.23.1
