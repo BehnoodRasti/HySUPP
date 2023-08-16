@@ -10,7 +10,7 @@ import numpy as np
 
 from .base import BlindUnmixingModel
 
-from src.extract import VCA
+from src.model.extractors import VCA
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
