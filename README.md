@@ -21,9 +21,7 @@ HySUPP is distributed under MIT license.
 
 ## Citing HySUPP
 
-Image Processing and Machine Learning for Hyperspectral Unmixing: An Overview and the HySUPP Python Package
-
-Behnood Rasti, Alexandre Zouaoui, Julien Mairal, Jocelyn Chanussot 
+Rasti, B., Zouaoui, A., Mairal, J., & Chanussot, J. (2023). Image Processing and Machine Learning for Hyperspectral Unmixing: An Overview and the HySUPP Python Package. ArXiv. /abs/2308.09375
 
 ## Installation
 
