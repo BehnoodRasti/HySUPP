@@ -70,7 +70,7 @@ There are a few required parameters to define in order to run an experiment:
 An example of a corresponding command line is simply:
 
 ```shell
-python unmixing.py mode=semi data=DC1 model=SUnCNN noise.SNR=30
+python unmixing.py mode=semi data=DC1 model=SUnCNN projection=True
 ```
 
 ## Data
@@ -94,3 +94,11 @@ For sparse unmixing, a dictionary `D` containing `M` atoms is required.
 * `M`: number of atoms
 
 We provide a utility script to turn any existing datasets composed of separated files to fit the required format used throughout the toolbox (See `utils/bundle_data.py`).
+
+## Parameter Tuning
+
+### Fine Tuning
+
+You may need to fine-tune the models' parameters for your application. Every method has a dedicated .yaml file located at config/model, which indicates the relevant parameters you can use for fine-tuning. For instance, for SUnCNN, the parameters are indicated in config/model/SUnCNN.yaml, and we change the number of iterations and the input of the CNN with the following. 
+
+python unmixing.py mode=semi data=DC1 model=SUnCNN projection=True model.niters=8000 model.noisy_input=False noise.SNR=30
