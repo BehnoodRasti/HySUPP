@@ -55,6 +55,7 @@ cd HySUPP && pip install -r requirements.txt
 ```
 
 If you encounter any issue when installing `spams`, we recommend reading the Installation section [here](https://pypi.org/project/spams/).
+For windows users, we suggest removing line 10 in the requirements.txt (spams==2.6.5.4), and after installing the requirements, install spams using pip install spams-bin.
 
 
 ## Getting started
