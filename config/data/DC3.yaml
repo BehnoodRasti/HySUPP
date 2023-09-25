@@ -1,4 +1,4 @@
 name: src.data.base.HSIWithGT
-dataset: "Sim1"
+dataset: "DC3"
 data_dir: ${DATA_dir}
 figs_dir: ${FIGS_dir}
