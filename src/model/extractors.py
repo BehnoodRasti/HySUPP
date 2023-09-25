@@ -386,11 +386,12 @@ class SISAL(BaseExtractor):
         # verbose = 3
         verbose = 3
         # soft constraint regularization parameter
-        tau = 10
-        # tau = 1
+        # tau = 10
+        tau = 1e-6
         # tau = 1000
         # Augmented Lagrangian regularization parameter
-        mu = p * 1000 / N
+        # mu = p * 1000 / N
+        mu = 1
         # no initial simplex
         M = 0
         # tolerance for the termination test

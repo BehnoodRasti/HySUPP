@@ -1,6 +1,6 @@
 # _target_: src.model.sparse.SUnCNN
 name: src.model.semisupervised.SUnCNN
-niters: 4000
+niters: 20000
 lr: 0.001
 exp_weight: 0.99
 noisy_input: True

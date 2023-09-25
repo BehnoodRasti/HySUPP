@@ -158,7 +158,9 @@ class UnDIP(nn.Module, SupervisedUnmixingModel):
 
         self = self.to(self.device)
         Y = Y.to(self.device)
+        # TODO Investigate requires grad here
         E = torch.Tensor(E).to(self.device)
+        E.requires_grad = False
 
         noisy_input = torch.rand_like(Y) if self.noisy_input else Y
 
