@@ -13,7 +13,8 @@ HySUPP is an open-source Python toolbox for hyperspectral unmixing practitioners
 * 3 unmixing categories
 * 20 unmixing methods
 * 4 metrics
-* 3 simulated datasets (*soon to be released*)
+* 3 simulated datasets (located under `./data/`)
+* 1 real-world dataset (located under `./data/`)
 
 ## License
 

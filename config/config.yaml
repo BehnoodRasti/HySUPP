@@ -13,6 +13,7 @@ defaults:
 
 # MATLAB
 # MATLAB_root: "/home/clear/matlab/"
+  # NOTE: Change to your own path to MATLAB
 MATLAB_root: "/home/clear/azouaoui/code/matlab/"
 DATA_dir: "./data/"
 FIGS_dir: "./figs/"
