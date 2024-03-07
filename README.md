@@ -72,7 +72,7 @@ There are a few required parameters to define in order to run an experiment:
 An example of a corresponding command line is simply:
 
 ```shell
-python unmixing.py data=DC1 model=SUnAA
+python unmixing.py data=DC1 model=SUnAA SNR=30
 ```
 
 ## Data
@@ -106,5 +106,5 @@ Every method has a dedicated `.yaml` file located at config/model, which indicat
 For instance, for `SUnAA`, the parameters are indicated in `config/model/SUnAA.yaml`, and we can change the number of iterations with the following line. 
 
 ```
-python unmixing.py data=DC1 model=SUnAA model.T=300 noise.SNR=30
+python unmixing.py data=DC1 model=SUnAA model.T=300 SNR=30
 ```
