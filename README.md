@@ -66,7 +66,7 @@ This toolbox uses [MLXP](https://inria-thoth.github.io/mlxp/) to manage multiple
 There are a few required parameters to define in order to run an experiment:
 * `data`: hyperspectral unmixing dataset
 * `model`: unmixing model
-* `noise.SNR`: input SNR (*optional*)
+* `SNR`: input SNR (*optional*)
 * `mode`: unmixing mode (no longer needed!)
 
 An example of a corresponding command line is simply:
