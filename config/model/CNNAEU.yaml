@@ -5,4 +5,5 @@ epochs: 320
 lr: 0.0003
 batch_size: 15
 patch_size: 40
+mode: blind
 

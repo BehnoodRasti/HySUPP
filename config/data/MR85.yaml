@@ -1,0 +1,4 @@
+name: src.data.base.HSIWithGT
+dataset: "MR_rho85_N10000"
+data_dir: ${DATA_dir}
+figs_dir: ${FIGS_dir}

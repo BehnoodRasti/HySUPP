@@ -4,3 +4,4 @@ lambda1_sp: 0.005
 lambda2_sp: 0.1
 beta: 30
 sideBPT: 10
+mode: semi

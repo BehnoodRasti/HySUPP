@@ -1,4 +1,4 @@
-mode: "blind"
+mode: ${model.mode}
 seed: 0
 projection: False
 l2_normalization: False

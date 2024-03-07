@@ -1,2 +1,3 @@
 # _target_: src.model.supervised.FCLSU
 name: src.model.supervised.FCLS
+mode: supervised

@@ -6,3 +6,4 @@ nblocks: 2
 lambd: 0.001
 mu: 0.01
 tied: False
+mode: "blind"
