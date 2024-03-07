@@ -64,15 +64,15 @@ For windows users, we suggest removing line 10 in the requirements.txt (spams==2
 This toolbox uses [MLXP](https://inria-thoth.github.io/mlxp/) to manage multiple experiments built on top of [hydra](https://hydra.cc/).
 
 There are a few required parameters to define in order to run an experiment:
-* `mode`: unmixing mode
 * `data`: hyperspectral unmixing dataset
 * `model`: unmixing model
 * `noise.SNR`: input SNR (*optional*)
+* `mode`: unmixing mode (no longer needed!)
 
 An example of a corresponding command line is simply:
 
 ```shell
-python unmixing.py mode=semi data=DC1 model=SUnCNN projection=True
+python unmixing.py data=DC1 model=SUnAA
 ```
 
 ## Data
@@ -101,6 +101,10 @@ We provide a utility script to turn any existing datasets composed of separated 
 
 ### Fine Tuning
 
-You may need to fine-tune the models' parameters for your application. Every method has a dedicated .yaml file located at config/model, which indicates the relevant parameters you can use for fine-tuning. For instance, for SUnCNN, the parameters are indicated in config/model/SUnCNN.yaml, and we can change the number of iterations and the input of the CNN with the following line. 
+You may need to fine-tune the model parameters for your application. 
+Every method has a dedicated `.yaml` file located at config/model, which indicates the relevant parameters you can use for fine-tuning.
+For instance, for `SUnAA`, the parameters are indicated in `config/model/SUnAA.yaml`, and we can change the number of iterations with the following line. 
 
-python unmixing.py mode=semi data=DC1 model=SUnCNN projection=True model.niters=8000 model.noisy_input=False noise.SNR=30
+```
+python unmixing.py data=DC1 model=SUnAA model.T=300 noise.SNR=30
+```
