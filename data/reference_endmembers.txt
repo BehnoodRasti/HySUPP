@@ -1,0 +1,27 @@
+The references (in order) of the spectra used from USGS to simulate DC1,2,3.
+
+DC1 (5 endmembers) =>
+Jarosite GDS101 Na,Sy 200
+Anorthite HS349.3B
+Calcite WS272
+Alunite GDS83 Na63
+Howlite GDS155
+
+DC2 (9 endmembers) =>
+Jarosite GDS101 Na,Sy 200
+Anorthite HS349.3B
+Calcite WS272
+Alunite GDS83 Na63
+Howlite GDS155
+Corrensite CorWa-1
+Fassaite HS118.3B
+Adularia GDS57 Orthoclase
+Andradite NMNH113829
+
+DC3 (6 endmembers) =>
+Olivine KI3291  <60um
+Adularia GDS57 Orthoclase
+Monticellite HS339.3B
+Jarosite GDS100 Na,Sy 90C
+Muscovite GDS116 Tanzania
+Cookeite CAr-1.a 104-150u
