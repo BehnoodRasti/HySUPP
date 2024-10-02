@@ -2,3 +2,4 @@
 name: src.model.blind.NMFQMV
 root_matlab: ${MATLAB_root}
 term: "center"
+mode: blind

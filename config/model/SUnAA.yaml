@@ -2,3 +2,4 @@
 name: src.model.semisupervised.SUnAA
 T: 500
 low_rank: False
+mode: semi

@@ -7,3 +7,4 @@ stepsFISTA: 3
 stepsAS: 100
 randominit: False
 numThreads: -1
+mode: "blind"

@@ -5,3 +5,4 @@ lr: 0.001
 exp_weight: 0.99
 lambd: 0.1
 kernel_size: 3
+mode: blind

@@ -4,3 +4,4 @@ lambda2: 0.1
 beta: 30
 slic_size: 6
 slic_reg: 0.005
+mode: semi

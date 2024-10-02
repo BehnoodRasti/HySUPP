@@ -1,0 +1,14 @@
+# _target_: src.model.blind.EndNet
+name: src.model.blind.EndNet
+num_spectra: 4000
+batch_size: 64
+lr: 0.001 # NOTE likely too high
+epochs: 40
+lambda0: 0.01
+lambda1: 50.0
+weight_decay: 1e-5
+noise_std: 0.3
+dropout_rate: 0.1
+lr_beta_1: 0.7
+mode: "blind"
+

@@ -1,8 +1,9 @@
-mode: "blind"
+mode: ${model.mode}
 seed: 0
 projection: False
 l2_normalization: False
 force_align: False
+SNR: Null
 
 defaults:
   - noise: AWGN
